@@ -2,7 +2,6 @@ import Featured from '@/components/featured'
 import { PiForkKnifeFill } from 'react-icons/pi'
 import { BsChatFill, BsCart } from 'react-icons/bs'
 
-
 export default function Home() {
   return (
     <main className='ml-[80px] pt-[60px] flex gap-[20px] px-[20px]'>

@@ -7,7 +7,7 @@ html {
 }
 
 .green-gradient {
-  background: linear-gradient(0,#00d4b7 0,#00d391 100%);
+  background: linear-gradient(0,#00d46a 0,#00d451 100%);
 }
 
 @layer components {
