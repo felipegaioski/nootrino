@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  background: rgba(0,0,0,.03);
+}
+
+.green-gradient {
+  background: linear-gradient(0,#00d4b7 0,#00d391 100%);
+}
+
+@layer components {
+  
+}
