@@ -1,11 +1,12 @@
 import Featured from '@/components/featured'
 import { PiForkKnifeFill } from 'react-icons/pi'
 import { BsChatFill, BsCart } from 'react-icons/bs'
+import Link from 'next/link';
 
 export default function Home() {
   return (
     <main className='ml-[80px] pt-[60px] flex gap-[20px] px-[20px]'>
-      <Featured />
+      {/* <Featured /> */}
       <div className='flex items-center justify-start flex-col w-full flex-1'>
         <div className='flex items-center justify-start flex-col gap-[20px] max-w-[350px]'>
           <h4 className='text-blue font-bold text-center'>Seu profissional ainda não disponibilizou nenhum plano alimentar
@@ -15,11 +16,11 @@ export default function Home() {
         </div>
 
         <div className='flex gap-[10px] w-full py-[20px] justify-center'>
-          <a href="#" className='bg-purple p-[10px] rounded-[5px] w-full'>
-            <h6 className='text-white font-bold text-[14px]'>Plano Alimentar</h6>
+          <a href="/pacientes" className='bg-blue p-[10px] rounded-[5px] w-full'>
+            <h6 className='text-white font-bold text-[30px]'>Seus Pacientes</h6>
             <div className='flex items-center justify-start py-[20px] px-[10px] gap-[10px]'>
               <PiForkKnifeFill size={23} color="white" />
-              <span className='text-white text-[12px] max-w-[100px]'>Consulte aqui seu plano alimentar</span>
+              <span className='text-white text-[12px] max-w-[300px]'>Veja e edite as informações e dietas dos seus pacientes</span>
             </div>
           </a>
           <a href="#" className='bg-yellow p-[10px] rounded-[5px] w-full'>

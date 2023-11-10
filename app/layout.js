@@ -6,8 +6,8 @@ import Sidebar from '@/components/sidebar'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Dietbox Clone',
-  description: 'Clone do Dietbox',
+  title: 'Nootrino',
+  description: 'Nootrino',
 }
 
 export default function RootLayout({ children }) {

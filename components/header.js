@@ -1,9 +1,6 @@
-
 import React from 'react'
 import { FaAppleAlt, FaUserAlt } from 'react-icons/fa'
 import { FiLogOut } from 'react-icons/fi'
-import Image from 'next/image'
-import { logo } from '../assets/Nootrino_logo_only.png'
 
 export default function Header() {
     return (
