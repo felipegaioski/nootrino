@@ -15,7 +15,7 @@ export default function Header() {
                     <span className='text-[14px] text-white'>Felipe Gaioski</span>
                     <FaUserAlt size={20} color="white" />
                 </a>
-                <a href="#" className='flex items-center justify-center gap-[20px]'>
+                <a href="/login" className='flex items-center justify-center gap-[20px]'>
                     <FiLogOut size={15} color="white" />
                     <span className='text-white text-[14px]'>Sair</span>
                 </a>
