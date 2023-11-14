@@ -52,7 +52,7 @@ const Form = () => {
       </div>
 
       <div className="form-group">
-        <button onClick={() => handleSubmit(onSubmit)()}>Criar conta</button>
+        <button onClick={() => handleSubmit(onSubmit)()}>Atualizar medidas corporais</button>
       </div>
     </div>
   );

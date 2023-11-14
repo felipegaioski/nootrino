@@ -20,18 +20,18 @@ const Form = () => {
           placeholder="Seu nome"
           {...register('name', {required: true})}
         />
-        {errors?.name?.type === 'required' && <p className="error-message">Name is required</p>}
+        {errors?.name?.type === 'required' && <p className="error-message">O nome é obrigatório</p>}
       </div>
 
       <div className="form-group">
         <label>E-mail</label>
         <input
-          // className={errors?.email && "input-error"}
+          className={errors?.email && "input-error"}
           type="email"
           placeholder="Seu e-mail"
           {...register('email', {required: true})}
         />
-        {/* {errors?.email && <p className="error-message">{errors?.email}</p>} */}
+        {errors?.email && <p className="error-message">O email é obrigatório</p>}
       </div>
 
       <div className="form-group">
@@ -43,29 +43,14 @@ const Form = () => {
           {...register('password', { required: true, minLength: 7} )}
         />
         {errors?.password?.type === 'minLength' && (
-          <p className="error-message">Password must have at least 7 characters</p>
+          <p className="error-message">A senha deve conter pelo menos 7 caracteres</p>
         )}
         {errors?.password?.type === 'required' && (
-          <p className="error-message">Password is required</p>
+          <p className="error-message">A senha é obrigatória</p>
         )}
       </div>
 
-      <div className="form-group">
-        <label>Profissão</label>
-        <select
-          // className={errors?.profession && "input-error"}
-          {...register('profession')}
-        >
-          <option value="0">Selecione sua profissão...</option>
-          <option value="developer">Desenvolvedor</option>
-          <option value="other">Outra</option>
-        </select>
-
-        {/* {errors?.profession && (
-          <p className="error-message">{errors?.profession}</p>
-        )} */}
-      </div>
-
+        {/*
       <div className="form-group">
         <div className="checkbox-group">
           <input
@@ -73,13 +58,14 @@ const Form = () => {
             name="privacy-policy"
             {...register('privacyTerms')}
           />
-          <label>I agree with the privacy terms.</label>
+          <label>Eu concordo com os termos de privacidade.</label>
         </div>
 
         {/* {errors?.privacyTerms && (
           <p className="error-message">{errors?.privacyTerms}</p>
-        )} */}
+        )} 
       </div>
+        */}
 
       <div className="form-group">
         <button onClick={() => handleSubmit(onSubmit)()}>Criar conta</button>

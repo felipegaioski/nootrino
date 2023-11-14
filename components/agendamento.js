@@ -15,6 +15,17 @@ const Agendamento = () => {
   return (
     <div className="app-container">
       <div className="form-group">
+        <label>Paciente</label>
+        <input
+          // className={errors?.email && "input-error"}
+          type="text"
+          placeholder="Selecione o paciente"
+          {...register('paciente', {required: true})}
+        />
+        {/* {errors?.email && <p className="error-message">{errors?.email}</p>} */}
+      </div>
+
+      <div className="form-group">
         <label>Selecione a data</label>
         <DatePicker selected={startDate} dateFormat="dd/MM/yy" onChange= 
               {(date) => setStartDate(date)} /> 
