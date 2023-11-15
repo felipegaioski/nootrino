@@ -1,5 +1,6 @@
 'use client'
 import DietForm from '@/components/criardieta'
+import MealPlanBuilder from '@/components/criardietaalimentos'
 
 export default function Home() {
   return (
@@ -8,7 +9,8 @@ export default function Home() {
         <div className='items-center justify-start flex-col w-full flex-1 text-[20px] py-[20px] gap-[10px] font-bold'>
           <h2 className='h2-title'>Criar dieta</h2>
         </div>
-        <DietForm />
+        {/* <DietForm /> */}
+        <MealPlanBuilder />
       </div>
     </main>
   )
