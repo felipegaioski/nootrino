@@ -3,14 +3,22 @@ import {db} from '../firebase-config';
 import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import 'firebase/firestore';
 import Select from 'react-select'
+import CriarAlimento from './criaralimento';
 import { IoClose } from "react-icons/io5";
 
 const MealPlanBuilder = () => {
-    const [newNome, setNewNome] = useState("");
-    const [newQuantidade, setNewQuantidade] = useState(0);
-    const [newUnidade, setNewUnidade] = useState("");
-    const [newCalorias, setNewCalorias] = useState(0);
-    const [selectedDay, setSelectedDay] = useState(null);
+  // Aparecer a Criação de alimento quando clica o botão Novo Alimento
+  const [showNovoAlimento, setShowNovoAlimento] = useState(false);
+  const handleButtonClick = () => {
+    setShowNovoAlimento(true);
+  };
+
+  const updateFoodDataAndHideAlimento = async () => {
+    await fetchFoodData();
+    setShowNovoAlimento(false);
+  };
+
+  const [selectedDay, setSelectedDay] = useState(null);
 
   const [foods, setFoods] = useState([]);
   const [selectedFood, setSelectedFood] = useState([]);
@@ -101,21 +109,11 @@ const MealPlanBuilder = () => {
   
   return (
     <div className='flex flex-col align-center items-center w-full'>
-        <div className='form-group'>
-        <label>Nome da comida</label>
-        <input placeholder="Nome" onChange={(event) => {setNewNome(event.target.value)}}/>
-        <br></br>
-        <label>Quantidade / porção</label>
-        <input type="number" placeholder="Quantidade" onChange={(event) => {setNewQuantidade(event.target.value)}}/>
-        <br></br>
-        <label>Unidade</label>
-        <input placeholder="Unidade" onChange={(event) => {setNewUnidade(event.target.value)}}/>
-        <br></br>
-        <label>Quantidade de calorias</label>
-        <input type="number" placeholder="Calorias" onChange={(event) => {setNewCalorias(event.target.value)}}/>
-        <br></br>
-
-      <button onClick={createFood}> Criar Alimento </button>
+      <div className='form-group'>
+        <div className='flex items-center justify-center gap-[20px]'>
+          {!showNovoAlimento && <button onClick={handleButtonClick} className='max-w-[200px]'>Novo Alimento</button>}
+          {showNovoAlimento  && <CriarAlimento onUpdate={updateFoodDataAndHideAlimento}/>}
+        </div>
 
       {/* Day Selection */}
       <div className="form-group">
