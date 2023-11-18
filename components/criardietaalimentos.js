@@ -5,6 +5,8 @@ import 'firebase/firestore';
 import Select from 'react-select'
 import CriarAlimento from './criaralimento';
 import { IoClose } from "react-icons/io5";
+import PlanoAlimentarPage from './showdieta';
+import DayButtons from './show';
 
 const MealPlanBuilder = () => {
   // Aparecer a Criação de alimento quando clica o botão Novo Alimento
@@ -18,8 +20,9 @@ const MealPlanBuilder = () => {
     setShowNovoAlimento(false);
   };
 
+  //States para Selects
+  const [planoAlimentar, setPlanoAlimentar] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
-
   const [foods, setFoods] = useState([]);
   const [selectedFood, setSelectedFood] = useState([]);
   const [selectedMeal, setSelectedMeal] = useState(null);
@@ -33,9 +36,13 @@ const MealPlanBuilder = () => {
     preWorkout: [],
     postWorkout: [],
   });
+
+  //State para calcular calorias
   const [totalCalories, setTotalCalories] = useState(0);
+
   const foodColletctionRef = collection(db, "alimentos")
 
+  //Buscar no firebase as comidas na collection alimentos
   const fetchFoodData = async () => {
     try {
       const snapshot = await getDocs(foodColletctionRef);
@@ -47,13 +54,18 @@ const MealPlanBuilder = () => {
   };
 
   const addFoodToMealPlan = () => {
-    if (selectedFood && selectedMeal) {
+    if (selectedFood && selectedMeal && selectedDay) {
+      /*
       setMealPlan({
         ...mealPlan,
         [selectedMeal.value]: [...mealPlan[selectedMeal.value], selectedFood.value],
       });
+      */
+
+      temp.append()
       setSelectedFood(null);
       setSelectedMeal(null);
+      setSelectedDay(null);
     }
   };
 
@@ -79,21 +91,13 @@ const MealPlanBuilder = () => {
     calculateTotalCalories();
   }, [mealPlan]);
 
-  const createFood = async () => {
-    await addDoc(foodColletctionRef, {nome: newNome, quantidade: Number(newQuantidade), unidade: newUnidade, calorias: newCalorias});
-  }
-
-  // Function to find food by name
-    const findFoodByName = (foodName) => {
-        return foods.find((food) => food.nome === foodName);
-    };
-
     const handleFoodChange = (selectedOption) => {
         setSelectedFood(selectedOption);
     };
 
     const handleAddFood = () => {
         if (selectedFood) {
+          //selectedFood.value = {quantidade: 1, nome: 'Bolo de Fubá', calorias: '150', unidade: 'fatia'}
           addFoodToMealPlan(selectedFood.value, 'breakfast');
           setSelectedFood(null);
         }
@@ -168,47 +172,14 @@ const MealPlanBuilder = () => {
       <button onClick={handleAddFood}>Adicionar</button>
       </div>
 
-      {/* Meal Plan */}
-      <div className='flex justify-center flex-col w-full py-[20px]'>
-        <table>
-          <thead>
-            <tr>
-              <th>Refeição</th>
-              <th>Alimentos</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.entries(mealPlan).map(([mealType, foods]) => (
-              <tr key={mealType}>
-                <td>{mealType}</td>
-                <td>
-                  <ul>
-                    {foods.map(food => (
-                      <li key={food.nome}>{food.nome}</li>
-                    ))}
-                  </ul>
-                </td>
-                <td>
-                  {foods.map(food => (
-                    <button
-                      key={food.nome}
-                      onClick={() => removeFoodFromMealPlan(food, mealType)}
-                    >
-                      Excluir {/*{food.nome}*/}
-                      {/*<IoClose size={15}/> */}
-                    </button>
-                  ))}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DayButtons />
+
+
 
       {/* Total Calories */}
       <p className='p-[2rem]'>Total Calories: {totalCalories}</p>
-      
+      <PlanoAlimentarPage /> 
+
     </div>
   );
 };

@@ -182,3 +182,20 @@ input::-webkit-inner-spin-button {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   transition: all 300ms ease;
 }
+
+/* dias da dieta */
+
+.square-button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: 2px solid #808080; /* Grey outline */
+  color: #808080; /* Grey text */
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.3s, color 0.3s; /* Transition effect for border and text color */
+}
+
+.square-button.clicked {
+  border-color: #00ff00; /* Green outline */
+  color: #00ff00; /* Green text */
+}
