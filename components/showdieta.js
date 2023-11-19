@@ -66,8 +66,7 @@ const PlanoAlimentarPage = () => {
     return(
         <div className='form-group'>
 
-            <button onClick={createDieta}> Criar Dieta </button>
-            <button onClick={getDieta}> Mostrar Dieta </button>
+            {/* <button onClick={createDieta}> Criar Dieta </button> */}
         </div>
     )
 }

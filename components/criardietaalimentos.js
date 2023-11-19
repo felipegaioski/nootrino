@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import {db} from '../firebase-config';
-import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
+import { db } from '../firebase-config';
+import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
 import 'firebase/firestore';
 import Select from 'react-select'
 import CriarAlimento from './criaralimento';
 import { IoClose } from "react-icons/io5";
 import PlanoAlimentarPage from './showdieta';
 import DayButtons from './show';
+import DietaDisplay from './dietaDisplay';
 
 const MealPlanBuilder = () => {
   // Aparecer a Criação de alimento quando clica o botão Novo Alimento
   const [showNovoAlimento, setShowNovoAlimento] = useState(false);
+
   const handleButtonClick = () => {
     setShowNovoAlimento(true);
   };
@@ -21,21 +23,254 @@ const MealPlanBuilder = () => {
   };
 
   //States para Selects
-  const [planoAlimentar, setPlanoAlimentar] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
   const [foods, setFoods] = useState([]);
   const [selectedFood, setSelectedFood] = useState([]);
   const [selectedMeal, setSelectedMeal] = useState(null);
-  const [mealPlan, setMealPlan] = useState({
-    breakfast: [],
-    morningSnack: [],
-    lunch: [],
-    afternoonSnack: [],
-    dinner: [],
-    afterDinner: [],
-    preWorkout: [],
-    postWorkout: [],
+  const [selectedQuant, setSelectedQuant] = useState(null);
+  const [porcao, setNewPorcao] = useState(null);
+
+  // buscar dieta no firebase
+  const dietaColletctionRef = collection(db, "dietas")
+  const dieta_doc = doc(dietaColletctionRef, "dieta3")
+
+  // Objeto para guardar os itens da dieta (só vai ser salvo no firebase no final)
+  const [dieta, setDieta] = useState({
+    id_nutri: "",
+    id_paciente: "",
+    nome: "",
+    dias: {
+      segunda_feira: {
+        refeicoes: {
+          cafe: {
+            comidas: []
+          },
+          colacao: {
+            comidas: []
+          },
+          almoco: {
+            comidas: []
+          },
+          lanche: {
+            comidas: []
+          },
+          jantar: {
+            comidas: []
+          },
+          ceia: {
+            comidas: []
+          },
+          pre_treino: {
+            comidas: []
+          },
+          pos_treino: {
+            comidas: []
+          }
+        }
+      },
+      terca_feira: {
+        refeicoes: {
+          cafe: {
+            comidas: []
+          },
+          colacao: {
+            comidas: []
+          },
+          almoco: {
+            comidas: []
+          },
+          lanche: {
+            comidas: []
+          },
+          jantar: {
+            comidas: []
+          },
+          ceia: {
+            comidas: []
+          },
+          pre_treino: {
+            comidas: []
+          },
+          pos_treino: {
+            comidas: []
+          }
+        }
+      },
+      quarta_feira: {
+        refeicoes: {
+          cafe: {
+            comidas: []
+          },
+          colacao: {
+            comidas: []
+          },
+          almoco: {
+            comidas: []
+          },
+          lanche: {
+            comidas: []
+          },
+          jantar: {
+            comidas: []
+          },
+          ceia: {
+            comidas: []
+          },
+          pre_treino: {
+            comidas: []
+          },
+          pos_treino: {
+            comidas: []
+          }
+        }
+      },
+      quinta_feira: {
+        refeicoes: {
+          cafe: {
+            comidas: []
+          },
+          colacao: {
+            comidas: []
+          },
+          almoco: {
+            comidas: []
+          },
+          lanche: {
+            comidas: []
+          },
+          jantar: {
+            comidas: []
+          },
+          ceia: {
+            comidas: []
+          },
+          pre_treino: {
+            comidas: []
+          },
+          pos_treino: {
+            comidas: []
+          }
+        }
+      },
+      sexta_feira: {
+        refeicoes: {
+          cafe: {
+            comidas: []
+          },
+          colacao: {
+            comidas: []
+          },
+          almoco: {
+            comidas: []
+          },
+          lanche: {
+            comidas: []
+          },
+          jantar: {
+            comidas: []
+          },
+          ceia: {
+            comidas: []
+          },
+          pre_treino: {
+            comidas: []
+          },
+          pos_treino: {
+            comidas: []
+          }
+        }
+      },
+      sabado: {
+        refeicoes: {
+          cafe: {
+            comidas: []
+          },
+          colacao: {
+            comidas: []
+          },
+          almoco: {
+            comidas: []
+          },
+          lanche: {
+            comidas: []
+          },
+          jantar: {
+            comidas: []
+          },
+          ceia: {
+            comidas: []
+          },
+          pre_treino: {
+            comidas: []
+          },
+          pos_treino: {
+            comidas: []
+          }
+        }
+      },
+      domingo: {
+        refeicoes: {
+          cafe: {
+            comidas: []
+          },
+          colacao: {
+            comidas: []
+          },
+          almoco: {
+            comidas: []
+          },
+          lanche: {
+            comidas: []
+          },
+          jantar: {
+            comidas: []
+          },
+          ceia: {
+            comidas: []
+          },
+          pre_treino: {
+            comidas: []
+          },
+          pos_treino: {
+            comidas: []
+          }
+        }
+      },
+    }
   });
+
+  const [food, setFood] = useState({
+    nome: "",
+    quantidade: "",
+    porcao: "",
+    unidade: "",
+    calorias: ""
+  })
+
+  const fetchDietaData = async () => {
+    try {
+      // Obtém os dados do documento
+      const docSnapshot = await getDoc(dieta_doc);
+
+      // Verifica se o documento existe
+      if (docSnapshot.exists()) {
+        // Extrai os dados do documento
+        const dietaData = docSnapshot.data();
+
+        // Atualiza o objeto dieta com os dados obtidos do Firebase
+        setDieta(dietaData);
+      } else {
+        console.log("O documento não existe.");
+      }
+    } catch (error) {
+      console.error('Erro ao buscar dados da dieta:', error);
+    }
+  };
+
+  useEffect(() => {
+    // Chama a função de busca quando o componente é montado
+    fetchDietaData();
+  }, []);
 
   //State para calcular calorias
   const [totalCalories, setTotalCalories] = useState(0);
@@ -53,27 +288,36 @@ const MealPlanBuilder = () => {
     }
   };
 
+  // Adiciona a comida selecionada no lugar certo na estrutura dieta
   const addFoodToMealPlan = () => {
     if (selectedFood && selectedMeal && selectedDay) {
-      /*
-      setMealPlan({
-        ...mealPlan,
-        [selectedMeal.value]: [...mealPlan[selectedMeal.value], selectedFood.value],
-      });
-      */
+      // Ensure that all necessary properties are present before updating dieta
 
-      temp.append()
-      setSelectedFood(null);
-      setSelectedMeal(null);
-      setSelectedDay(null);
+      setFood(selectedFood.value);
+      food.quantidade = selectedQuant;
+      console.log(food.quantidade)
+      food.porcao = selectedQuant * selectedFood.porcao / selectedFood.quantidade;
+      food.calorias = selectedQuant * selectedFood.calorias / selectedFood.quantidade;
+
+      console.log(food)
+
+
+      if (
+        dieta.dias[selectedDay.value] &&
+        dieta.dias[selectedDay.value].refeicoes[selectedMeal.value]
+      ) {
+        dieta.dias[selectedDay.value].refeicoes[selectedMeal.value].comidas.push(selectedFood.value);
+
+        // Clear selections after adding the food
+        setSelectedFood(null);
+        setSelectedMeal(null);
+        setSelectedDay(null);
+      } else {
+        alert('Dia ou Refeição inválida');
+      }
+    } else {
+      alert('Por favor, selecione o dia da semana, a refeição e o alimento para adicionar');
     }
-  };
-
-  const removeFoodFromMealPlan = (food, mealType) => {
-    setMealPlan({
-      ...mealPlan,
-      [mealType]: mealPlan[mealType].filter(item => item !== food),
-    });
   };
 
   const calculateTotalCalories = () => {
@@ -87,98 +331,131 @@ const MealPlanBuilder = () => {
     fetchFoodData();
   }, []);
 
-  useEffect(() => {
-    calculateTotalCalories();
-  }, [mealPlan]);
 
-    const handleFoodChange = (selectedOption) => {
-        setSelectedFood(selectedOption);
-    };
+  const handleFoodChange = (selectedOption) => {
+    setSelectedFood(selectedOption);
+  };
 
-    const handleAddFood = () => {
-        if (selectedFood) {
-          //selectedFood.value = {quantidade: 1, nome: 'Bolo de Fubá', calorias: '150', unidade: 'fatia'}
-          addFoodToMealPlan(selectedFood.value, 'breakfast');
-          setSelectedFood(null);
-        }
-    };
+  const handleAddFood = () => {
+    if (selectedFood) {
+      //selectedFood.value = {quantidade: 1, nome: 'Bolo de Fubá', calorias: '150', unidade: 'fatia', porcao: 1}
+      addFoodToMealPlan();
+    }
+  };
 
-    const handleMealChange = (selectedOption) => {
-        setSelectedMeal(selectedOption);
-    };
+  const handleMealChange = (selectedOption) => {
+    setSelectedMeal(selectedOption);
+  };
 
-    const handleDayChange = (selectedOption) => {
-        setSelectedDay(selectedOption);
-      };
-  
+  const handleDayChange = (selectedOption) => {
+    setSelectedDay(selectedOption);
+  };
+
+  const handleQuantChange = (event) => {
+    setSelectedQuant(event.target.value);
+    console.log(selectedQuant)
+  };
+
+  const handleDietaNomeChange = (event) => {
+    const novoNome = event.target.value;
+
+    // Atualiza o estado da dieta com o novo nome
+    setDieta((prevDieta) => ({ ...prevDieta, nome: novoNome }));
+  };
+
   return (
     <div className='flex flex-col align-center items-center w-full'>
       <div className='form-group'>
         <div className='flex items-center justify-center gap-[20px]'>
           {!showNovoAlimento && <button onClick={handleButtonClick} className='max-w-[200px]'>Novo Alimento</button>}
-          {showNovoAlimento  && <CriarAlimento onUpdate={updateFoodDataAndHideAlimento}/>}
+          {showNovoAlimento && <CriarAlimento onUpdate={updateFoodDataAndHideAlimento} />}
         </div>
 
-      {/* Day Selection */}
-      <div className="form-group">
+        {/* Day Selection */}
+        <div className="form-group">
           <h2 className="h2-title font-bold">Selecione o dia da semana</h2>
           <Select
             value={selectedDay}
             onChange={handleDayChange}
             options={[
-              { value: 'seg', label: 'Segunda-feira' },
-              { value: 'ter', label: 'Terça-feira' },
-              { value: 'qua', label: 'Quarta-feira' },
-              { value: 'qui', label: 'Quinta-feira' },
-              { value: 'sex', label: 'Sexta-feira' },
-              { value: 'sab', label: 'Sábado' },
-              { value: 'dom', label: 'Domingo' }
+              { value: 'segunda_feira', label: 'Segunda-feira' },
+              { value: 'terca_feira', label: 'Terça-feira' },
+              { value: 'quarta_feira', label: 'Quarta-feira' },
+              { value: 'quinta_feira', label: 'Quinta-feira' },
+              { value: 'sexta_feira', label: 'Sexta-feira' },
+              { value: 'sabado', label: 'Sábado' },
+              { value: 'domingo', label: 'Domingo' }
             ]}
             isSearchable
           />
-    </div>
+        </div>
 
-      {/* Meal Selection */}
+        {/* Meal Selection */}
         <div className='form-group'>
-            <h2 className='h2-title font-bold'>Selecione a refeição</h2>
-            <Select
+          <h2 className='h2-title font-bold'>Selecione a refeição</h2>
+          <Select
             value={selectedMeal}
             onChange={handleMealChange}
             options={[
-                { value: 'breakfast', label: 'Café da manhã' },
-                { value: 'morningSnack', label: 'Colação' },
-                { value: 'lunch', label: 'Almoço' },
-                { value: 'afternoonSnack', label: 'Lanche da tarde' },
-                { value: 'dinner', label: 'Jantar' },
-                { value: 'afterDinner', label: 'Ceia' },
-                { value: 'preWorkout', label: 'Pré-treino' },
-                { value: 'postWorkout', label: 'Pós-treino' },
+              { value: 'cafe', label: 'Café da manhã' },
+              { value: 'colacao', label: 'Colação' },
+              { value: 'almoco', label: 'Almoço' },
+              { value: 'lanche', label: 'Lanche da tarde' },
+              { value: 'jantar', label: 'Jantar' },
+              { value: 'ceia', label: 'Ceia' },
+              { value: 'pre_treino', label: 'Pré-treino' },
+              { value: 'pos_treino', label: 'Pós-treino' },
             ]}
             isSearchable
-            />
+          />
         </div>
 
-      {/* Food Selection */}
+        {/* Food Selection */}
+        <div className='form-group'>
+          <h2 className='h2-title font-bold'>Selecione o alimento</h2>
+          <Select
+            value={selectedFood}
+            onChange={handleFoodChange}
+            options={foods.map((food) => ({ value: food, label: food.nome }))}
+            isSearchable
+          />
+        </div>
+
+        {/* Quantidade */}
+        <div className='form-group'>
+          <h2 className='h2-title font-bold'>Quantidade</h2>
+          <input
+            type="number"
+            onChange={(event) => { handleQuantChange(event) }}
+            placeholder="Digite a quantidade em gramas ou ml"
+          />
+        </div>
+
+        <button onClick={handleAddFood}>Adicionar</button>
+      </div>
+
+      <br></br>
       <div className='form-group'>
-        <h2 className='h2-title font-bold'>Selecione o alimento</h2>
-        <Select
-          value={selectedFood}
-          onChange={handleFoodChange}
-          options={foods.map((food) => ({ value: food, label: food.nome }))}
-          isSearchable
+        {/* Input para editar o nome da dieta */}
+        <label htmlFor="dietaNome" className="font-bold text-lg">Nome da Dieta:</label>
+        <input
+          type="text"
+          id="dietaNome"
+          value={dieta.nome}
+          onChange={handleDietaNomeChange}
+          placeholder="Digite o nome da dieta"
+          className="border p-2"
         />
       </div>
+      <br></br>
 
-      <button onClick={handleAddFood}>Adicionar</button>
-      </div>
-
-      <DayButtons />
+      <DayButtons dieta={dieta} setDieta={setDieta} />
 
 
 
       {/* Total Calories */}
       <p className='p-[2rem]'>Total Calories: {totalCalories}</p>
-      <PlanoAlimentarPage /> 
+      <PlanoAlimentarPage />
 
     </div>
   );

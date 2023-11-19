@@ -189,6 +189,7 @@ input::-webkit-inner-spin-button {
   padding: 10px 20px;
   margin: 5px;
   border: 2px solid #808080; /* Grey outline */
+  border-radius: 10px;
   color: #808080; /* Grey text */
   text-decoration: none;
   cursor: pointer;
@@ -198,4 +199,25 @@ input::-webkit-inner-spin-button {
 .square-button.clicked {
   border-color: #00ff00; /* Green outline */
   color: #00ff00; /* Green text */
+}
+
+.tabela-dieta table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  color: #00d46a;
+}
+
+.tabela-dieta th, td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.tabela-dieta th {
+  background-color: #f2f2f2;
+}
+
+.tabela-dieta td {
+  color: black;
 }

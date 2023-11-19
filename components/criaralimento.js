@@ -6,14 +6,25 @@ import 'firebase/firestore';
 const CriarAlimento = ( { onUpdate } ) => {
     const [newNome, setNewNome] = useState("");
     const [newQuantidade, setNewQuantidade] = useState(0);
+    const [newPorcao, setNewPorcao] = useState(0);
     const [newUnidade, setNewUnidade] = useState("");
     const [newCalorias, setNewCalorias] = useState(0);
 
     const foodColletctionRef = collection(db, "alimentos")
 
     const createFood = async () => {
-        await addDoc(foodColletctionRef, {nome: newNome, quantidade: Number(newQuantidade), unidade: newUnidade, calorias: newCalorias});
-
+        
+        if (
+            newNome.trim() === "" ||
+            newQuantidade <= 0 ||
+            newPorcao <= 0 ||
+            newUnidade.trim() === "" ||
+            newCalorias <= 0
+        ) {
+            alert("Por favor, preencha todos os atributos do alimento");
+            return;
+        }
+        await addDoc(foodColletctionRef, {nome: newNome, quantidade: Number(newQuantidade), porcao: Number(newPorcao), unidade: newUnidade, calorias: newCalorias});    
         onUpdate();
     }
 
@@ -22,11 +33,14 @@ const CriarAlimento = ( { onUpdate } ) => {
             <label>Nome da comida</label>
             <input placeholder="Nome" onChange={(event) => {setNewNome(event.target.value)}}/>
             <br></br>
-            <label>Quantidade / porção</label>
-            <input type="number" placeholder="Quantidade" onChange={(event) => {setNewQuantidade(event.target.value)}}/>
+            <label>Quantidade</label>
+            <input type="number" placeholder="Quantidade em gramas ou ml" onChange={(event) => {setNewQuantidade(event.target.value)}}/>
+            <br></br>
+            <label>Porção</label>
+            <input type="number" placeholder="Medida caseira (número)" onChange={(event) => {setNewPorcao(event.target.value)}}/>
             <br></br>
             <label>Unidade</label>
-            <input placeholder="Unidade" onChange={(event) => {setNewUnidade(event.target.value)}}/>
+            <input placeholder="Unidade (ex: fatia, colher)" onChange={(event) => {setNewUnidade(event.target.value)}}/>
             <br></br>
             <label>Quantidade de calorias</label>
             <input type="number" placeholder="Calorias" onChange={(event) => {setNewCalorias(event.target.value)}}/>
