@@ -1,12 +1,8 @@
-import Featured from '@/components/featured'
-import { PiForkKnifeFill } from 'react-icons/pi'
-import { BsChatFill, BsCart } from 'react-icons/bs'
-import { BsPersonVcardFill } from 'react-icons/bs'
-import { FaHouse, FaCalendar, FaGear } from 'react-icons/fa6'
+import { FaCalendar } from 'react-icons/fa6'
 import { MdRestaurantMenu } from "react-icons/md";
 import { GiBodyHeight } from "react-icons/gi";
 
-export default function Home() {
+export default function HomePaciente() {
   return (
     <main className='ml-[80px] pt-[60px] flex gap-[20px] px-[20px]'>
       <div className='flex items-center justify-start flex-col w-full flex-1'>

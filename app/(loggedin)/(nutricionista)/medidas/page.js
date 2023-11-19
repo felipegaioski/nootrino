@@ -1,4 +1,5 @@
 'use client'
+import AtualizarMedida from '@/components/medidasform'
 import Medidasform from '@/components/medidasform'
 
 export default function Medidas() {
@@ -8,7 +9,7 @@ export default function Medidas() {
         <div className='items-center justify-start flex-col w-full flex-1 text-[20px] py-[20px] gap-[10px] font-bold'>
           <h2 className='h2-title'>Medidas do paciente</h2>
         </div>
-        <Medidasform />
+        <AtualizarMedida />
       </div>
     </main>
   )

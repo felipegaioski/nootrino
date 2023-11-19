@@ -1,11 +1,11 @@
 import Header from '@/components/header'
-import Sidebar from '@/components/sidebar'
+import SidebarPaciente from '@/components/sidebarpaciente'
 
 export default function LoggedinLayout({ children }) {
   return (
     <main>
       <Header />
-      <Sidebar />
+      <SidebarPaciente />
       {children}
     </main>
   )
