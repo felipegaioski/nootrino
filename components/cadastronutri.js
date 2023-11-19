@@ -1,107 +1,126 @@
 'use client'
-import { useForm } from "react-hook-form";
+//import { useForm } from "react-hook-form";
 
-
-import { isEmpty } from "lodash";
+import React, { useState } from 'react';
+import { db } from '../firebase-config';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
+import 'firebase/firestore';
+import { useRouter } from 'next/navigation';
+import Select from 'react-select'
 
 const Form = () => {
+  const { push } = useRouter();
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+  //const { register, handleSubmit, formState: { errors } } = useForm();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [nome, setNome] = useState('');
+  const [selectedCrn, setSelectedCrn] = useState(null);
+  const [inscricao, setInscricao] = useState(null);
 
-  const onSubmit = (data) => { console.log(data) };
+  const handleChange = async () => {
+
+    const usersColletctionRef = collection(db, "user")
+    const data = await getDocs(usersColletctionRef);
+    const users = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+    users.map(user => {
+      if (user.email === email) {
+        alert("O endereço de email já existe!");
+        return;
+      }
+    })
+    addDoc(usersColletctionRef, {
+      nome: nome, email: email, senha: password, paciente: false, ativo: true,
+      crn: selectedCrn.value, inscricao: inscricao, cod_user: Math.floor(Math.random() * 1000) + 1
+    });
+    alert("Cadastro realizado com sucesso!");
+    push('/home');
+  }
+
+  const handleNome = (event) => {
+    setNome(event.target.value);
+  }
+
+  const handleEmail = (event) => {
+    setEmail(event.target.value);
+  }
+
+  const handlePassword = (event) => {
+    setPassword(event.target.value);
+  }
+
+  const handleCrnChange = (selectedOption) => {
+    setSelectedCrn(selectedOption);
+  };
+
+  const handleInscricao = (event) => {
+    setInscricao(event.target.value);
+  };
 
   return (
     <div className="app-container">
       <div className="form-group">
         <label>Nome</label>
         <input
-          className={errors?.name && "input-error"}
           type="text"
-          placeholder="Seu nome"
-          {...register('name', {required: true})}
+          placeholder="Nome completo"
+          onChange={(event) => { handleNome(event) }}
         />
-        {errors?.name?.type === 'required' && <p className="error-message">O nome é obrigatório</p>}
       </div>
 
       <div className="form-group">
         <label>E-mail</label>
         <input
-          className={errors?.email && "input-error"}
           type="email"
           placeholder="Seu e-mail"
-          {...register('email', {required: true})}
+          onChange={(event) => { handleEmail(event) }}
         />
-        {errors?.email && <p className="error-message">O email é obrigatório</p>}
       </div>
 
       <div className="form-group">
         <label>Senha</label>
         <input
-          className={errors?.password && "input-error"}
           type="password"
           placeholder="Senha"
-          {...register('password', { required: true, minLength: 7} )}
+          onChange={(event) => { handlePassword(event) }}
         />
-        {errors?.password?.type === 'minLength' && (
-          <p className="error-message">A senha deve conter pelo menos 7 caracteres</p>
-        )}
-        {errors?.password?.type === 'required' && (
-          <p className="error-message">A senha é obrigatória</p>
-        )}
       </div>
 
       <div className="form-group">
         <label>CRN</label>
-        <select
-          // className={errors?.profession && "input-error"}
-          {...register('crn')}
-        >
-          <option value="0">Selecione a região...</option>
-          <option value="crn1">CRN 1</option>
-          <option value="crn2">CRN 2</option>
-          <option value="crn3">CRN 3</option>
-          <option value="crn4">CRN 4</option>
-          <option value="crn5">CRN 5</option>
-          <option value="crn6">CRN 6</option>
-          <option value="crn7">CRN 7</option>
-          <option value="crn8">CRN 8</option>
-          <option value="crn9">CRN 9</option>
-          <option value="crn10">CRN 10</option>
-          <option value="crn11">CRN 11</option>
-          <option value="crn12">CRN 12</option>
-        </select>
+        <Select
+          value={selectedCrn}
+          onChange={handleCrnChange}
+          options={[
+            { value: '1', label: 'CRN 1' },
+            { value: '2', label: 'CRN 2' },
+            { value: '3', label: 'CRN 3' },
+            { value: '4', label: 'CRN 4' },
+            { value: '5', label: 'CRN 5' },
+            { value: '6', label: 'CRN 6' },
+            { value: '7', label: 'CRN 7' },
+            { value: '8', label: 'CRN 8' },
+            { value: '9', label: 'CRN 9' },
+            { value: '10', label: 'CRN 10' },
+            { value: '11', label: 'CRN 11' },
+            { value: '12', label: 'CRN 12' }
+          ]}
+          isSearchable
+        />
         <br></br>
         <label>Inscrição</label>
         <input
-          className={errors?.name && "input-error"}
           type="text"
           placeholder="Inscrição"
-          {...register('inscricao', {required: true})}
+          onChange={(event) => { handleInscricao(event) }}
         />
-        {errors?.name?.type === 'required' && <p className="error-message">O número da inscrição é obrigatório</p>}
       </div>
-
-      {/* 
-      <div className="form-group">
-        <div className="checkbox-group">
-          <input
-            type="checkbox"
-            name="privacy-policy"
-            {...register('privacyTerms')}
-          />
-          <label>Eu concordo com os termos de privacidade.</label>
-        </div>
-
-        {errors?.privacyTerms && (
-          <p className="error-message">{errors?.privacyTerms}</p>
-        )}
-      </div>
-      */}
 
       <div className="form-group">
-        <button onClick={() => handleSubmit(onSubmit)()}>Criar conta</button>
+        <button onClick={handleChange}>Criar conta</button>
       </div>
-    </div>
+    </div >
   );
 };
 

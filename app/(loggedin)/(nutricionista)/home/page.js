@@ -1,8 +1,6 @@
-import Featured from '@/components/featured'
-import { PiForkKnifeFill } from 'react-icons/pi'
-import { BsChatFill, BsCart } from 'react-icons/bs'
+import { IoPersonAddSharp } from "react-icons/io5";
 import { BsPersonVcardFill } from 'react-icons/bs'
-import { FaHouse, FaCalendar, FaGear } from 'react-icons/fa6'
+import { FaCalendar } from 'react-icons/fa6'
 
 export default function Home() {
   return (
@@ -30,20 +28,20 @@ export default function Home() {
               <span className='text-white text-[14px] max-w-[300px]'>Confira sua agenda de atendimentos</span>
             </div>
           </a>
-          <a href="#" className='bg-green p-[10px] rounded-[5px] w-full'>
-            <h6 className='text-white font-bold text-[14px]'>Lista de Compras</h6>
+          <a href="/addpaciente" className='bg-green p-[10px] rounded-[5px] w-full'>
+            <h6 className='text-white font-bold text-[30px]'>Adicionar Paciente</h6>
             <div className='flex items-center justify-start py-[20px] px-[10px] gap-[10px]'>
-              <BsCart size={23} color="white" />
-              <span className='text-white text-[12px] max-w-[100px]'>Você possui 0 itens na lista</span>
+              <IoPersonAddSharp size={23} color="white" />
+              <span className='text-white text-[14px] max-w-[300px]'>Procure e adicione um novo paciente</span>
             </div>
           </a>
         </div>
-          <div className='bg-white rounded-[5px] w-full shadow-sm px-[20px] py-[20px] flex flex-col h-[250px]'>
-            <span className='text-purple text-[14px]'>Materiais</span>
-            <p className='text-[12px] text-gray'>1 material disponível</p>
-          </div>
+        <div className='bg-white rounded-[5px] w-full shadow-sm px-[20px] py-[20px] flex flex-col h-[250px]'>
+          <span className='text-purple text-[14px]'>Materiais</span>
+          <p className='text-[12px] text-gray'>1 material disponível</p>
         </div>
-        <a href="/">Landingpage</a>
+      </div>
+      <a href="/">Landingpage</a>
     </main>
   )
 }
