@@ -4,10 +4,7 @@ import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
 import 'firebase/firestore';
 import Select from 'react-select'
 import CriarAlimento from './criaralimento';
-import { IoClose } from "react-icons/io5";
-import PlanoAlimentarPage from './showdieta';
 import DayButtons from './show';
-import DietaDisplay from './dietaDisplay';
 
 const MealPlanBuilder = () => {
   // Aparecer a Criação de alimento quando clica o botão Novo Alimento
@@ -239,13 +236,13 @@ const MealPlanBuilder = () => {
     }
   });
 
-  const [food, setFood] = useState({
+  let food = {
     nome: "",
-    quantidade: "",
-    porcao: "",
-    unidade: "",
-    calorias: ""
-  })
+    quantidade: 0,
+    porcao: 0,
+    unidade: 0,
+    calorias: 0
+  };
 
   const fetchDietaData = async () => {
     try {
@@ -293,20 +290,24 @@ const MealPlanBuilder = () => {
     if (selectedFood && selectedMeal && selectedDay) {
       // Ensure that all necessary properties are present before updating dieta
 
-      setFood(selectedFood.value);
-      food.quantidade = selectedQuant;
-      console.log(food.quantidade)
-      food.porcao = selectedQuant * selectedFood.porcao / selectedFood.quantidade;
-      food.calorias = selectedQuant * selectedFood.calorias / selectedFood.quantidade;
+      //food = selectedFood.value;
+      food = JSON.parse(JSON.stringify(selectedFood.value));
 
-      console.log(food)
+      food.quantidade = selectedQuant;
+
+      food.porcao = Math.round(selectedQuant * Number(selectedFood.value.porcao) / Number(selectedFood.value.quantidade).toFixed());
+      //food.porcao.toFixed(1);
+
+      food.calorias = selectedQuant * Number(selectedFood.value.calorias) / Number(selectedFood.value.quantidade);
+      food.calorias.toFixed(1);
+
 
 
       if (
         dieta.dias[selectedDay.value] &&
         dieta.dias[selectedDay.value].refeicoes[selectedMeal.value]
       ) {
-        dieta.dias[selectedDay.value].refeicoes[selectedMeal.value].comidas.push(selectedFood.value);
+        dieta.dias[selectedDay.value].refeicoes[selectedMeal.value].comidas.push(food);
 
         // Clear selections after adding the food
         setSelectedFood(null);
@@ -318,13 +319,6 @@ const MealPlanBuilder = () => {
     } else {
       alert('Por favor, selecione o dia da semana, a refeição e o alimento para adicionar');
     }
-  };
-
-  const calculateTotalCalories = () => {
-    const total = Object.values(mealPlan)
-      .flat()
-      .reduce((acc, food) => acc + food.calories, 0);
-    setTotalCalories(total);
   };
 
   useEffect(() => {
@@ -450,13 +444,8 @@ const MealPlanBuilder = () => {
       <br></br>
 
       <DayButtons dieta={dieta} setDieta={setDieta} />
-
-
-
-      {/* Total Calories */}
-      <p className='p-[2rem]'>Total Calories: {totalCalories}</p>
-      <PlanoAlimentarPage />
-
+      <br></br>
+      <br></br>
     </div>
   );
 };
