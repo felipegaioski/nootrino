@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase-config';
-import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, getDoc, addDoc, setDoc } from 'firebase/firestore';
 import 'firebase/firestore';
 import Select from 'react-select'
 import CriarAlimento from './criaralimento';
 import DayButtons from './show';
 
 const MealPlanBuilder = () => {
+  const cod_nutri = localStorage.getItem('cod_user');
+  //const [codPaciente, setCodPaciente] = useState('');
+  let codPaciente;
+
+  // Pegar código a partir da url
+  useEffect(() => {
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+    const { id } = params;
+    //setCodPaciente(id);
+    codPaciente = id;
+    //console.log(codPaciente);
+  }, []);
+
   // Aparecer a Criação de alimento quando clica o botão Novo Alimento
   const [showNovoAlimento, setShowNovoAlimento] = useState(false);
 
@@ -27,14 +41,11 @@ const MealPlanBuilder = () => {
   const [selectedQuant, setSelectedQuant] = useState(null);
   const [porcao, setNewPorcao] = useState(null);
 
-  // buscar dieta no firebase
-  const dietaColletctionRef = collection(db, "dietas")
-  const dieta_doc = doc(dietaColletctionRef, "dieta3")
 
   // Objeto para guardar os itens da dieta (só vai ser salvo no firebase no final)
   const [dieta, setDieta] = useState({
-    id_nutri: "",
-    id_paciente: "",
+    cod_nutri: "",
+    cod_paciente: "",
     nome: "",
     dias: {
       segunda_feira: {
@@ -245,24 +256,42 @@ const MealPlanBuilder = () => {
   };
 
   const fetchDietaData = async () => {
-    try {
-      // Obtém os dados do documento
-      const docSnapshot = await getDoc(dieta_doc);
+    // buscar dieta no firebase
+    const dietaColletctionRef = collection(db, "dietas");
+    const data = await getDocs(dietaColletctionRef);
+    const dietas = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    //console.log(codPaciente)
+    const dieta_doc = dietas.find((dieta) => dieta.cod_paciente === codPaciente);
 
-      // Verifica se o documento existe
-      if (docSnapshot.exists()) {
-        // Extrai os dados do documento
-        const dietaData = docSnapshot.data();
+    if (dieta_doc) {
+      setDieta(dieta_doc);
+    } else {
+      // console.log("O documento não existe.");
 
-        // Atualiza o objeto dieta com os dados obtidos do Firebase
-        setDieta(dietaData);
-      } else {
-        console.log("O documento não existe.");
-      }
-    } catch (error) {
-      console.error('Erro ao buscar dados da dieta:', error);
+      // // Add a new document
+      // const newDocRef = await addDoc(dietaColletctionRef, {
+      //   cod_paciente: codPaciente,
+      //   cod_nutri: cod_nutri,
+      // });
+
+      // // Fetch the newly created document
+      // const newDocSnapshot = await getDoc(newDocRef);
+
+      // // Check if the new document exists
+      // if (newDocSnapshot.exists()) {
+      //   // Extrai os dados do novo documento
+      //   const newDietaData = newDocSnapshot.data();
+
+      //   // Atualiza o objeto dieta com os dados obtidos do Firebase
+      //   setDieta(newDietaData);
+      dieta.cod_paciente = codPaciente;
+      dieta.cod_nutri = cod_nutri;
+      // } else {
+      //   console.log("O novo documento não foi encontrado.");
+      // }
     }
   };
+
 
   useEffect(() => {
     // Chama a função de busca quando o componente é montado
@@ -313,7 +342,9 @@ const MealPlanBuilder = () => {
         setSelectedFood(null);
         setSelectedMeal(null);
         setSelectedDay(null);
+        setSelectedQuant(null);
       } else {
+        console.log(dieta)
         alert('Dia ou Refeição inválida');
       }
     } else {
@@ -347,7 +378,7 @@ const MealPlanBuilder = () => {
 
   const handleQuantChange = (event) => {
     setSelectedQuant(event.target.value);
-    console.log(selectedQuant)
+    //console.log(selectedQuant)
   };
 
   const handleDietaNomeChange = (event) => {

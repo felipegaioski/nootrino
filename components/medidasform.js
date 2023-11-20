@@ -13,38 +13,50 @@ const AtualizarMedida = () => {
   const [newMassa_muscular, setNewMassa_muscular] = useState('');
   const [newImc, setNewImc] = useState(null);
 
-  const measuresColletctionRef = collection(db, "medidas")
+  const measuresCollectionRef = collection(db, 'medidas');
+
   const calcularImc = () => {
-    if (!newPeso || !newAltura) {
+    /*if (!newPeso || !newAltura) {
       alert('Por favor, informe o peso e a altura para calcular o IMC.');
       return;
     }
-
+    */
     const peso = parseFloat(newPeso);
     const altura = parseFloat(newAltura);
 
-    if (isNaN(peso) || isNaN(altura) || altura === 0) {
+    /*if (isNaN(peso) || isNaN(altura) || altura === 0) {
       alert('Peso e altura devem ser números válidos maiores que zero.');
       return;
     }
-
-    const imcValue = peso / Math.pow(altura, 2);
-    setNewImc(imcValue.toFixed(2)); // Define o IMC com 2 casas decimais
+*/
+    const imcValue1 = (peso / Math.pow(altura, 2));
+    const imcValue = imcValue1 - imcValue1 / 14;
+    setNewImc(imcValue.toFixed(4));
   };
 
   const salvarMedida = async () => {
-    await addDoc(measuresColletctionRef, {
+    await addDoc(measuresCollectionRef, {
       altura: parseFloat(newAltura),
       cod_medidas: newCod_medidas,
       cod_paciente: newCod_paciente,
       data: newData,
       massa_gorda: newMassa_gorda,
       massa_muscular: newMassa_muscular,
-      peso: parseFloat(newPeso),
-      imc: parseFloat(newImc),
-      //onUpdate();
+      peso: Number(newPeso),
+      imc: Number(newImc),
     });
   };
+
+  const handlePesoChange = (event) => {
+    setNewPeso(event.target.value);
+    calcularImc();
+  };
+
+  const handleAlturaChange = (event) => {
+    setNewAltura(event.target.value);
+    calcularImc();
+  };
+
   return (
     <div className="app-container">
       <div className="form-group">
@@ -53,7 +65,7 @@ const AtualizarMedida = () => {
           type="number"
           placeholder="Digite o peso do paciente"
           value={newPeso}
-          onChange={(event) => setNewPeso(event.target.value)}
+          onChange={handlePesoChange}
         />
       </div>
 
@@ -63,7 +75,7 @@ const AtualizarMedida = () => {
           type="number"
           placeholder="Digite a altura do paciente"
           value={newAltura}
-          onChange={(event) => setNewAltura(event.target.value)}
+          onChange={handleAlturaChange}
         />
       </div>
 
@@ -98,17 +110,37 @@ const AtualizarMedida = () => {
       </div>
 
       <div className="form-group">
-        <button onClick={calcularImc}>Calcular IMC</button>
+        <label>Código das Medidas</label>
+        <input
+          type="timestamp"
+          placeholder="Código das medidas"
+          value={newCod_medidas}
+          onChange={(event) => setNewCod_medidas(event.target.value)}
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Código do Paciente</label>
+        <input
+          type="timestamp"
+          placeholder="Código do paciente"
+          value={newCod_paciente}
+          onChange={(event) => setNewData(event.target.value)}
+        />
+      </div>
+
+      <div className="form-group">
+        <button onClick={salvarMedida}>Salvar Medidas Corporais</button>
       </div>
 
       {newImc !== null && (
         <div className="imc-result">
           <h4>IMC Calculado: {newImc}</h4>
-          <button onClick={salvarMedida}>Salvar Medida</button>
         </div>
       )}
     </div>
+
   );
 };
 
-export default AtualizarMedida
+export default AtualizarMedida;

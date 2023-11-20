@@ -36,12 +36,11 @@ export default function Home() {
             </div>
           </a>
         </div>
-        <div className='bg-white rounded-[5px] w-full shadow-sm px-[20px] py-[20px] flex flex-col h-[250px]'>
+        {/* <div className='bg-white rounded-[5px] w-full shadow-sm px-[20px] py-[20px] flex flex-col h-[250px]'>
           <span className='text-purple text-[14px]'>Materiais</span>
           <p className='text-[12px] text-gray'>1 material disponível</p>
-        </div>
+        </div> */}
       </div>
-      <a href="/">Landingpage</a>
     </main>
   )
 }

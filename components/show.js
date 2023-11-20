@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { db } from '../firebase-config';
-import { collection, setDoc, doc } from 'firebase/firestore';
+import { collection, setDoc, doc, addDoc } from 'firebase/firestore';
 import { TiDelete } from "react-icons/ti";
 import 'firebase/firestore';
 
@@ -9,11 +9,9 @@ function DayButtons({ dieta, setDieta }) {
 
   const dietaColletctionRef = collection(db, "dietas")
 
-  const dieta_doc = doc(dietaColletctionRef, "dieta3")
-
   const createDieta = async () => {
 
-    await setDoc(dieta_doc, dieta);
+    await addDoc(dietaColletctionRef, dieta);
     alert("Dieta salva com sucesso!");
 
   };

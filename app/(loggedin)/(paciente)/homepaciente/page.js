@@ -14,34 +14,33 @@ export default function HomePaciente() {
         </div>
         */}
         <div className='flex gap-[10px] w-full py-[20px] justify-center'>
-          <a href="/pacientes" className='bg-blue p-[10px] rounded-[5px] w-full'>
+          <a href="/planoalimentar" className='bg-blue p-[10px] rounded-[5px] w-full'>
             <h6 className='text-white font-bold text-[30px]'>Seu Plano Alimentar</h6>
             <div className='flex items-center justify-start py-[20px] px-[10px] gap-[10px]'>
               <MdRestaurantMenu size={23} color="white" />
               <span className='text-white text-[14px] max-w-[300px]'>Confira sua dieta semanal!</span>
             </div>
           </a>
-          <a href="/agenda" className='bg-yellow p-[10px] rounded-[5px] w-full'>
+          <a href="/consultas" className='bg-yellow p-[10px] rounded-[5px] w-full'>
             <h6 className='text-white font-bold text-[30px]'>Consultas</h6>
             <div className='flex items-center justify-start py-[20px] px-[10px] gap-[10px]'>
               <FaCalendar size={23} color="white" />
-              <span className='text-white text-[14px] max-w-[300px]'>Confira seus atendimentos</span>
+              <span className='text-white text-[14px] max-w-[300px]'>Confira suas consultas</span>
             </div>
           </a>
-          <a href="#" className='bg-green p-[10px] rounded-[5px] w-full'>
-            <h6 className='text-white font-bold text-[30px]'>Medidas Antropométricas</h6>
+          <a href="medidaspaciente" className='bg-green p-[10px] rounded-[5px] w-full'>
+            <h6 className='text-white font-bold text-[30px]'>Medidas Corporais</h6>
             <div className='flex items-center justify-start py-[20px] px-[10px] gap-[10px]'>
               <GiBodyHeight size={23} color="white" />
               <span className='text-white text-[14px] max-w-[300px]'>Veja seu histórico de medidas corporais</span>
             </div>
           </a>
         </div>
-        <div className='bg-white rounded-[5px] w-full shadow-sm px-[20px] py-[20px] flex flex-col h-[250px]'>
+        {/* <div className='bg-white rounded-[5px] w-full shadow-sm px-[20px] py-[20px] flex flex-col h-[250px]'>
           <span className='text-purple text-[14px]'>Materiais</span>
           <p className='text-[12px] text-gray'>1 material disponível</p>
-        </div>
+        </div> */}
       </div>
-      <a href="/">Landingpage</a>
     </main>
   )
 }

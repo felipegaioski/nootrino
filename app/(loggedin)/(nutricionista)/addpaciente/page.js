@@ -1,6 +1,6 @@
 import { FaEdit } from 'react-icons/fa';
 import { BiSolidFoodMenu } from 'react-icons/bi';
-import ListaPacientes from '@/components/listapacientes';
+import ListaPacientes from '@/components/listaaddpacientes';
 
 export default function AddPaciente() {
     return (

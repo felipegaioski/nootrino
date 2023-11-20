@@ -4,35 +4,49 @@ import React, { useState } from 'react';
 import { db } from '../firebase-config';
 import { collection, getDocs } from 'firebase/firestore';
 import 'firebase/firestore';
+import { useRouter } from 'next/navigation';
 
 const Form = () => {
+
+  const { push } = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState('');
 
   const handleChange = async () => {
-
-    const usersColletctionRef = collection(db, "user")
-    const data = await getDocs(usersColletctionRef);
+    const usersCollectionRef = collection(db, "user");
+    const data = await getDocs(usersCollectionRef);
     const users = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-    users.map(user => {
-      if (user.email === email) {
-        setUser(user);
+    let foundUser = null;
+
+    users.forEach((u) => {
+      if (u.email === email) {
+        foundUser = u;
       }
-    })
-    console.log(user.paciente);
-    if (user.senha === password) {
-      if (user.paciente) {
-        alert("logado como paciente")
+    });
+
+    if (foundUser) {
+      setUser(foundUser);
+
+      if (foundUser.senha === password) {
+        localStorage.setItem('cod_user', foundUser.cod_user);
+        localStorage.setItem('nome', foundUser.nome);
+        if (foundUser.paciente) {
+          alert("Logado como paciente");
+          push('/homepaciente');
+        } else {
+          alert("Logado como nutricionista");
+          push('/home');
+        }
       } else {
-        alert("logado como nutricionista")
+        alert("Senha incorreta");
       }
     } else {
-      alert("Senha incorreta");
+      alert("Usuário não encontrado");
     }
-  }
+  };
 
   const handleEmail = (event) => {
     setEmail(event.target.value);
