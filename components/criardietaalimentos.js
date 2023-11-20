@@ -8,7 +8,6 @@ import DayButtons from './show';
 
 const MealPlanBuilder = () => {
   const cod_nutri = localStorage.getItem('cod_user');
-  //const [codPaciente, setCodPaciente] = useState('');
   let codPaciente;
 
   // Pegar código a partir da url
@@ -16,9 +15,7 @@ const MealPlanBuilder = () => {
     const urlSearchParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlSearchParams.entries());
     const { id } = params;
-    //setCodPaciente(id);
     codPaciente = id;
-    //console.log(codPaciente);
   }, []);
 
   // Aparecer a Criação de alimento quando clica o botão Novo Alimento
@@ -40,7 +37,6 @@ const MealPlanBuilder = () => {
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [selectedQuant, setSelectedQuant] = useState(null);
   const [porcao, setNewPorcao] = useState(null);
-
 
   // Objeto para guardar os itens da dieta (só vai ser salvo no firebase no final)
   const [dieta, setDieta] = useState({
@@ -260,46 +256,20 @@ const MealPlanBuilder = () => {
     const dietaColletctionRef = collection(db, "dietas");
     const data = await getDocs(dietaColletctionRef);
     const dietas = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-    //console.log(codPaciente)
     const dieta_doc = dietas.find((dieta) => dieta.cod_paciente === codPaciente);
 
     if (dieta_doc) {
       setDieta(dieta_doc);
+      localStorage.setItem('doc_id', dieta_doc.id);
     } else {
-      // console.log("O documento não existe.");
-
-      // // Add a new document
-      // const newDocRef = await addDoc(dietaColletctionRef, {
-      //   cod_paciente: codPaciente,
-      //   cod_nutri: cod_nutri,
-      // });
-
-      // // Fetch the newly created document
-      // const newDocSnapshot = await getDoc(newDocRef);
-
-      // // Check if the new document exists
-      // if (newDocSnapshot.exists()) {
-      //   // Extrai os dados do novo documento
-      //   const newDietaData = newDocSnapshot.data();
-
-      //   // Atualiza o objeto dieta com os dados obtidos do Firebase
-      //   setDieta(newDietaData);
       dieta.cod_paciente = codPaciente;
       dieta.cod_nutri = cod_nutri;
-      // } else {
-      //   console.log("O novo documento não foi encontrado.");
-      // }
     }
   };
 
-
   useEffect(() => {
-    // Chama a função de busca quando o componente é montado
     fetchDietaData();
   }, []);
-
-  //State para calcular calorias
-  const [totalCalories, setTotalCalories] = useState(0);
 
   const foodColletctionRef = collection(db, "alimentos")
 
@@ -317,20 +287,12 @@ const MealPlanBuilder = () => {
   // Adiciona a comida selecionada no lugar certo na estrutura dieta
   const addFoodToMealPlan = () => {
     if (selectedFood && selectedMeal && selectedDay) {
-      // Ensure that all necessary properties are present before updating dieta
 
-      //food = selectedFood.value;
       food = JSON.parse(JSON.stringify(selectedFood.value));
-
       food.quantidade = selectedQuant;
-
       food.porcao = Math.round(selectedQuant * Number(selectedFood.value.porcao) / Number(selectedFood.value.quantidade).toFixed());
-      //food.porcao.toFixed(1);
-
       food.calorias = selectedQuant * Number(selectedFood.value.calorias) / Number(selectedFood.value.quantidade);
       food.calorias.toFixed(1);
-
-
 
       if (
         dieta.dias[selectedDay.value] &&
@@ -338,7 +300,6 @@ const MealPlanBuilder = () => {
       ) {
         dieta.dias[selectedDay.value].refeicoes[selectedMeal.value].comidas.push(food);
 
-        // Clear selections after adding the food
         setSelectedFood(null);
         setSelectedMeal(null);
         setSelectedDay(null);
@@ -356,14 +317,12 @@ const MealPlanBuilder = () => {
     fetchFoodData();
   }, []);
 
-
   const handleFoodChange = (selectedOption) => {
     setSelectedFood(selectedOption);
   };
 
   const handleAddFood = () => {
     if (selectedFood) {
-      //selectedFood.value = {quantidade: 1, nome: 'Bolo de Fubá', calorias: '150', unidade: 'fatia', porcao: 1}
       addFoodToMealPlan();
     }
   };
@@ -378,13 +337,10 @@ const MealPlanBuilder = () => {
 
   const handleQuantChange = (event) => {
     setSelectedQuant(event.target.value);
-    //console.log(selectedQuant)
   };
 
   const handleDietaNomeChange = (event) => {
     const novoNome = event.target.value;
-
-    // Atualiza o estado da dieta com o novo nome
     setDieta((prevDieta) => ({ ...prevDieta, nome: novoNome }));
   };
 

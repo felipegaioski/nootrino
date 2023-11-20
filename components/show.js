@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { db } from '../firebase-config';
-import { collection, setDoc, doc, addDoc } from 'firebase/firestore';
+import { collection, setDoc, updateDoc, doc, addDoc } from 'firebase/firestore';
 import { TiDelete } from "react-icons/ti";
 import 'firebase/firestore';
 
@@ -8,12 +8,18 @@ function DayButtons({ dieta, setDieta }) {
   const [day, setDay] = useState('');
 
   const dietaColletctionRef = collection(db, "dietas")
+  const doc_id = localStorage.getItem('doc_id');
 
-  const createDieta = async () => {
+  const salvarDieta = async () => {
+    const dieta_doc = doc(db, "dietas", doc_id)
 
-    await addDoc(dietaColletctionRef, dieta);
+    if (doc_id) {
+      await updateDoc(dieta_doc, dieta);
+      localStorage.removeItem('doc_id');
+    } else {
+      await setDoc(dietaColletctionRef, dieta);
+    }
     alert("Dieta salva com sucesso!");
-
   };
 
   const handleButtonClick = (clickedDay) => {
@@ -140,7 +146,7 @@ function DayButtons({ dieta, setDieta }) {
         <p><b>Calorias Totais:</b> {calculateTotalCalories()} kCal</p>
       </div>
       <div className='form-group'>
-        <button onClick={createDieta}> Salvar Dieta </button>
+        <button onClick={salvarDieta}> Salvar Dieta </button>
       </div>
     </div>
   );
