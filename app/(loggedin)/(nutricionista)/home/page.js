@@ -1,6 +1,8 @@
 import { IoPersonAddSharp } from "react-icons/io5";
 import { BsPersonVcardFill } from 'react-icons/bs'
 import { FaCalendar } from 'react-icons/fa6'
+import { GiShinyApple } from "react-icons/gi";
+import { HiPlusSm } from "react-icons/hi";
 
 export default function Home() {
   return (
@@ -33,6 +35,14 @@ export default function Home() {
             <div className='flex items-center justify-start py-[20px] px-[10px] gap-[10px]'>
               <IoPersonAddSharp size={23} color="white" />
               <span className='text-white text-[14px] max-w-[300px]'>Procure e adicione um novo paciente</span>
+            </div>
+          </a>
+          <a href="/addalimento" className='bg-[#793b9e] p-[10px] rounded-[5px] w-full'>
+            <h6 className='text-white font-bold text-[30px]'>Criar novo alimento</h6>
+            <div className='flex items-center justify-start py-[20px] px-[10px] gap-[10px]'>
+              <HiPlusSm size={20} color="white" />
+              <GiShinyApple size={30} color="white" />
+              <span className='text-white text-[14px] max-w-[300px]'>Crie um novo alimento para adicioná-lo às dietas</span>
             </div>
           </a>
         </div>

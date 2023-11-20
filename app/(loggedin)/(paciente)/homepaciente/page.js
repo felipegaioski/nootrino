@@ -1,24 +1,34 @@
+'use client'
 import { FaCalendar } from 'react-icons/fa6'
 import { MdRestaurantMenu } from "react-icons/md";
 import { GiBodyHeight } from "react-icons/gi";
 
 export default function HomePaciente() {
+  let nome_nutri = localStorage.getItem('nome_nutri');
+  let phrase = "";
+  if (!nome_nutri) {
+    phrase = "Ainda não há um(a) nutricionista para você."
+  } else {
+    phrase = "Seu / sua nutricionista: " + nome_nutri;
+  }
+
   return (
     <main className='ml-[80px] pt-[60px] flex gap-[20px] px-[20px]'>
+      {/* <div className='flex items-center justify-start flex-col gap-[20px] max-w-[350px]'>
+        <h1>Seu/sua nutricionista: {nome_nutri} </h1>
+      </div> */}
       <div className='flex items-center justify-start flex-col w-full flex-1'>
-        {/* 
+        <br></br>
         <div className='flex items-center justify-start flex-col gap-[20px] max-w-[350px]'>
-          <h4 className='text-blue font-bold text-center'>Seu profissional ainda não disponibilizou nenhum plano alimentar</h4>
-          <img src="https://dietbox.azureedge.net/static/Images/noplan.png" alt="" />
-          <button className='text-[12px] bg-gray/10 px-[20px] py-[10px] rounded-[5px] text-black/60'>Entre em contato com seu (sua) nutricionista</button>
+          <h4 className='text-blue font-bold text-center'>{phrase}</h4>
         </div>
-        */}
+
         <div className='flex gap-[10px] w-full py-[20px] justify-center'>
           <a href="/planoalimentar" className='bg-blue p-[10px] rounded-[5px] w-full'>
             <h6 className='text-white font-bold text-[30px]'>Seu Plano Alimentar</h6>
             <div className='flex items-center justify-start py-[20px] px-[10px] gap-[10px]'>
               <MdRestaurantMenu size={23} color="white" />
-              <span className='text-white text-[14px] max-w-[300px]'>Confira sua dieta semanal!</span>
+              <span className='text-white text-[14px] max-w-[300px]'>Confira sua dieta semanal</span>
             </div>
           </a>
           <a href="/consultas" className='bg-yellow p-[10px] rounded-[5px] w-full'>

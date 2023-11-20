@@ -290,8 +290,8 @@ const MealPlanBuilder = () => {
 
       food = JSON.parse(JSON.stringify(selectedFood.value));
       food.quantidade = selectedQuant;
-      food.porcao = Math.round(selectedQuant * Number(selectedFood.value.porcao) / Number(selectedFood.value.quantidade).toFixed());
-      food.calorias = selectedQuant * Number(selectedFood.value.calorias) / Number(selectedFood.value.quantidade);
+      food.porcao = Math.round(parseFloat(selectedQuant * Number(selectedFood.value.porcao) / Number(selectedFood.value.quantidade)).toFixed());
+      food.calorias = parseFloat(selectedQuant * Number(selectedFood.value.calorias) / Number(selectedFood.value.quantidade));
       food.calorias.toFixed(1);
 
       if (

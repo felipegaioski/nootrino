@@ -1,143 +1,245 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../firebase-config';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc, Timestamp } from 'firebase/firestore';
 import 'firebase/firestore';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import Select from 'react-select'
+import ShowMedidas from '@/components/showmedidas'
 
 const AtualizarMedida = () => {
   const [newPeso, setNewPeso] = useState('');
   const [newAltura, setNewAltura] = useState('');
-  const [newCod_medidas, setNewCod_medidas] = useState('');
-  const [newCod_paciente, setNewCod_paciente] = useState('');
-  const [newData, setNewData] = useState('');
+  const [newObs, setNewObs] = useState('');
+  const [startDate, setStartDate] = useState(new Date());
+  const [startTime, setStartTime] = useState('12:00'); // Initial time value
   const [newMassa_gorda, setNewMassa_gorda] = useState('');
   const [newMassa_muscular, setNewMassa_muscular] = useState('');
   const [newImc, setNewImc] = useState(null);
+  const [codUser, setCodUser] = useState('');
+  const [showForm, setShowForm] = useState(false);
+  const [medidasCreated, setMedidasCreated] = useState(false);
+
+  // const [selectedMedida, setSelectedMedida] = useState(null);
+
+  const cod_nutri = localStorage.getItem('cod_user');
+
+  //let codPaciente;
+  // Pegar código a partir da url
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  const params = Object.fromEntries(urlSearchParams.entries());
+  const { id } = params;
+  //codPaciente = id;
+
+  const handleButtonClick = () => {
+    setShowForm(!showForm);
+  };
 
   const measuresCollectionRef = collection(db, 'medidas');
+  const userCollectionRef = collection(db, 'user');
+
+  const fetchMedidas = async () => {
+
+  };
+  useEffect(() => {
+    fetchMedidas();
+  }, []);
 
   const calcularImc = () => {
-    /*if (!newPeso || !newAltura) {
-      alert('Por favor, informe o peso e a altura para calcular o IMC.');
+    if (!newPeso.trim() || !newAltura.trim()) {
+      // If either newPeso or newAltura is empty or contains only whitespace
       return;
     }
-    */
-    const peso = parseFloat(newPeso);
-    const altura = parseFloat(newAltura);
 
-    /*if (isNaN(peso) || isNaN(altura) || altura === 0) {
+    const peso = parseFloat(newPeso);
+    const altura = newAltura / 100;
+
+    if (isNaN(peso) || isNaN(altura) || altura === 0 || peso === 0) {
       alert('Peso e altura devem ser números válidos maiores que zero.');
       return;
     }
-*/
-    const imcValue1 = (peso / Math.pow(altura, 2));
-    const imcValue = imcValue1 - imcValue1 / 14;
-    setNewImc(imcValue.toFixed(4));
+
+    const imcValue = (peso / Math.pow(altura, 2));
+    setNewImc(imcValue.toFixed(2));
+  };
+
+  const handleDateChange = (time) => {
+    setStartDate(time);
   };
 
   const salvarMedida = async () => {
+    const selectedDateTime = new Date(startDate);
+    const timestamp = Timestamp.fromDate(selectedDateTime);
+
     await addDoc(measuresCollectionRef, {
-      altura: parseFloat(newAltura),
-      cod_medidas: newCod_medidas,
-      cod_paciente: newCod_paciente,
-      data: newData,
+      altura: newAltura,
+      cod_nutri: cod_nutri,
+      cod_paciente: id,
+      data: timestamp,
       massa_gorda: newMassa_gorda,
       massa_muscular: newMassa_muscular,
       peso: Number(newPeso),
       imc: Number(newImc),
+      obs: newObs
     });
+
+    alert("Registro de medidas criado com sucesso!");
+
+    setMedidasCreated(true);
+    setShowForm(false);
   };
 
   const handlePesoChange = (event) => {
     setNewPeso(event.target.value);
-    calcularImc();
   };
 
   const handleAlturaChange = (event) => {
     setNewAltura(event.target.value);
-    calcularImc();
   };
+
+  useEffect(() => {
+    calcularImc();
+  }, [newPeso, newAltura]);
+
+  // const handleEditClick = async (medidaId) => {
+  //   const medidaDoc = await getDoc(doc(db, 'medidas', medidaId));
+  //   const medidaData = medidaDoc.data();
+  //   setSelectedMedida({
+  //     peso: medidaData.peso.toString(),
+  //     altura: medidaData.altura.toString(),
+  //     obs: medidaData.obs,
+  //     massa_gorda: medidaData.massa_gorda.toString(),
+  //     massa_muscular: medidaData.massa_muscular.toString(),
+  //     imc: medidaData.imc ? medidaData.imc.toString() : null,
+  //     date: medidaData.data.toDate(),
+  //   });
+  //   setShowForm(true);
+  // };
 
   return (
     <div className="app-container">
+      <ShowMedidas />
       <div className="form-group">
-        <label>Peso (kg)</label>
-        <input
-          type="number"
-          placeholder="Digite o peso do paciente"
-          value={newPeso}
-          onChange={handlePesoChange}
-        />
+        {!showForm && <button onClick={handleButtonClick}>Novo Registro de Medida</button>}
       </div>
-
-      <div className="form-group">
-        <label>Altura (m)</label>
-        <input
-          type="number"
-          placeholder="Digite a altura do paciente"
-          value={newAltura}
-          onChange={handleAlturaChange}
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Percentual de Gordura (%)</label>
-        <input
-          type="number"
-          placeholder="Digite o percentual de gordura do paciente."
-          value={newMassa_gorda}
-          onChange={(event) => setNewMassa_gorda(event.target.value)}
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Massa Muscular (%)</label>
-        <input
-          type="number"
-          placeholder="Digite o percentual de massa muscular do paciente."
-          value={newMassa_muscular}
-          onChange={(event) => setNewMassa_muscular(event.target.value)}
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Data</label>
-        <input
-          type="timestamp"
-          placeholder="Data da medição"
-          value={newData}
-          onChange={(event) => setNewData(event.target.value)}
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Código das Medidas</label>
-        <input
-          type="timestamp"
-          placeholder="Código das medidas"
-          value={newCod_medidas}
-          onChange={(event) => setNewCod_medidas(event.target.value)}
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Código do Paciente</label>
-        <input
-          type="timestamp"
-          placeholder="Código do paciente"
-          value={newCod_paciente}
-          onChange={(event) => setNewData(event.target.value)}
-        />
-      </div>
-
-      <div className="form-group">
-        <button onClick={salvarMedida}>Salvar Medidas Corporais</button>
-      </div>
-
-      {newImc !== null && (
-        <div className="imc-result">
-          <h4>IMC Calculado: {newImc}</h4>
+      {showForm && (<div>
+        <div className="form-group">
+          <label>Peso (kg)</label>
+          <input
+            type="number"
+            placeholder="Digite o peso do paciente"
+            value={newPeso}
+            onChange={handlePesoChange}
+          />
         </div>
-      )}
+
+        <div className="form-group">
+          <label>Altura (cm)</label>
+          <input
+            type="number"
+            placeholder="Digite a altura do paciente"
+            value={newAltura}
+            onChange={handleAlturaChange}
+          />
+        </div>
+
+        <div className="imc-result form-group">
+          <h4><b className='text-[#3cb651]'>IMC:</b> {newImc}</h4>
+        </div>
+
+        <div className="form-group">
+          <label>Percentual de Gordura</label>
+          <div style={{ position: 'relative', width: '100%' }}>
+            <input
+              type="number"
+              placeholder="         Digite o percentual de gordura do paciente."
+              value={newMassa_gorda}
+              onChange={(event) => setNewMassa_gorda(event.target.value)}
+              style={{
+                width: '100%',
+                padding: '10px 15px',
+                borderRadius: '5px',
+                border: '1px solid #ccc',
+                boxSizing: 'border-box',
+                position: 'relative',
+                background: 'transparent',
+                zIndex: '1',
+              }}
+            />
+            <span
+              style={{
+                position: 'absolute',
+                top: '50%',
+                right: '450px',
+                transform: 'translateY(-50%)',
+                zIndex: '2',
+              }}
+            >
+              %
+            </span>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label>Percentual de Músculo</label>
+          <div style={{ position: 'relative', width: '100%' }}>
+            <input
+              type="number"
+              placeholder="         Digite o percentual de massa muscular do paciente."
+              value={newMassa_muscular}
+              onChange={(event) => setNewMassa_muscular(event.target.value)}
+              style={{
+                width: '100%',
+                padding: '10px 15px',
+                borderRadius: '5px',
+                border: '1px solid #ccc',
+                boxSizing: 'border-box',
+                position: 'relative',
+                background: 'transparent',
+                zIndex: '1',
+              }}
+            />
+            <span
+              style={{
+                position: 'absolute',
+                top: '50%',
+                right: '450px',
+                transform: 'translateY(-50%)',
+                zIndex: '2',
+              }}
+            >
+              %
+            </span>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label>Selecione a data</label>
+          <DatePicker selected={startDate} dateFormat="dd/MM/yy" onChange={handleDateChange} />
+        </div>
+
+        <div className="form-group">
+          <label>Observações</label>
+          <textarea
+            placeholder="Digite aqui as observações..."
+            value={newObs}
+            onChange={(event) => setNewObs(event.target.value)}
+            style={{
+              width: '100%',
+              padding: '10px 15px',
+              borderRadius: '5px',
+              border: '1px solid #ccc',
+              boxSizing: 'border-box',
+            }}
+          />
+        </div>
+
+        <div className="form-group">
+          <button onClick={salvarMedida}>Salvar Medidas</button>
+        </div>
+
+      </div>)}
+
     </div>
 
   );

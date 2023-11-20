@@ -9,6 +9,7 @@ export default function Header() {
     const deleteLocalStorage = () => {
         localStorage.removeItem('nome');
         localStorage.removeItem('cod_user');
+        localStorage.removeItem('nome_nutri');
     }
 
     return (

@@ -34,10 +34,18 @@ const Form = () => {
         localStorage.setItem('cod_user', foundUser.cod_user);
         localStorage.setItem('nome', foundUser.nome);
         if (foundUser.paciente) {
-          alert("Logado como paciente");
+          if (foundUser.cod_nutri != null) {
+            users.forEach((u) => {
+              if (u.cod_user == foundUser.cod_nutri) {
+                //alert(u.nome)
+                localStorage.setItem('nome_nutri', u.nome);
+              }
+            });
+          }
+          //alert("Logado como paciente");
           push('/homepaciente');
         } else {
-          alert("Logado como nutricionista");
+          //alert("Logado como nutricionista");
           push('/home');
         }
       } else {

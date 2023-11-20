@@ -11,13 +11,13 @@ function DayButtons({ dieta, setDieta }) {
   const doc_id = localStorage.getItem('doc_id');
 
   const salvarDieta = async () => {
-    const dieta_doc = doc(db, "dietas", doc_id)
 
     if (doc_id) {
+      const dieta_doc = doc(db, "dietas", doc_id);
       await updateDoc(dieta_doc, dieta);
-      localStorage.removeItem('doc_id');
+      //localStorage.removeItem('doc_id');
     } else {
-      await setDoc(dietaColletctionRef, dieta);
+      await addDoc(dietaColletctionRef, dieta);
     }
     alert("Dieta salva com sucesso!");
   };
