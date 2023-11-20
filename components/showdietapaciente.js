@@ -221,13 +221,12 @@ function ShowDieta() {
         const data = await getDocs(dietaColletctionRef);
         const dietas = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
         const dieta_doc = dietas.find((dieta) => dieta.cod_paciente === codPaciente);
-        //alert(dieta_doc);
 
         if (dieta_doc) {
-            //alert(dieta_doc);
             setDieta(dieta_doc);
         } else {
             alert("Você ainda não possui uma dieta.")
+            return;
         }
     };
 

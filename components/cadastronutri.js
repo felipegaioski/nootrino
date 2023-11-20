@@ -24,16 +24,44 @@ const Form = () => {
     const data = await getDocs(usersColletctionRef);
     const users = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
+    //gerar código
+    let cod;
+    let unique = false;
+    function generateCode() {
+      cod = Math.floor(Math.random() * 1000) + 1;
+    }
+
+    // verificar se já existe
+    function verifyCod() {
+      users.map(user => {
+        if (user.cod_user === cod) {
+          //generateCode();
+          console.log("Re-gerando código");
+          return false;
+        }
+      })
+      return true;
+    }
+
     users.map(user => {
       if (user.email === email) {
         alert("O endereço de email já existe!");
         return;
       }
     })
+
+    while (unique === false) {
+      // gerar código do usuário
+      generateCode();
+      unique = verifyCod();
+    };
+
     addDoc(usersColletctionRef, {
       nome: nome, email: email, senha: password, paciente: false, ativo: true,
-      crn: selectedCrn.value, inscricao: inscricao, cod_user: Math.floor(Math.random() * 1000) + 1
+      crn: selectedCrn.value, inscricao: inscricao, cod_user: cod
     });
+    localStorage.setItem('nome', nome);
+    localStorage.setItem('cod_user', cod);
     alert("Cadastro realizado com sucesso!");
     push('/home');
   }

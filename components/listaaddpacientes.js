@@ -38,6 +38,7 @@ const ListaPacientes = () => {
             const userDoc = doc(usersColletctionRef, selectedPaciente.value.id);
             await updateDoc(userDoc, { cod_nutri: cod_nutri });
         }
+        alert("Paciente adicionado! Veja na página Seus Pacientes.");
     }
 
     return (
