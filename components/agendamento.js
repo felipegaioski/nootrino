@@ -1,15 +1,51 @@
-import React, { useState } from 'react';
+'use client'
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import TimePicker from 'react-time-picker';
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-time-picker/dist/TimePicker.css';
+import { db } from '../firebase-config';
+import { collection, getDocs, addDoc, Timestamp } from 'firebase/firestore';
+import Select from 'react-select'
+import ShowAtendimentos from '@/components/showatendimentos';
 
 const Agendamento = () => {
+  // Mostrar ou esconder formulário
+  const [showAgendamento, setShowAgendamento] = useState(false);  // Initialize state
   const [startDate, setStartDate] = useState(new Date());
   const [startTime, setStartTime] = useState('12:00'); // Initial time value
+  //const [timestamp, setTimestamp] = useState(null);
+  const [local, setLocal] = useState('')
+  const [atendimentoCreated, setAtendimentoCreated] = useState(false);
 
-  const handleAgendamento = () => {
-    // Add your logic for handling the appointment here
+  // Buscar e selecionar paciente
+  const [selectedPaciente, setSelectedPaciente] = useState([]);
+  const [pacientes, setPacientes] = useState([]);
+  const [usersColletctionRef, setUsersColletctionRef] = useState(null);
+
+  const cod_nutri = localStorage.getItem('cod_user');
+
+  const fetchPacientes = async () => {
+    const usersColletctionRef = collection(db, "user");
+    setUsersColletctionRef(usersColletctionRef);
+    const data = await getDocs(usersColletctionRef);
+    const users = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+    const filteredUsers = users.filter(user => user.paciente === true && user.cod_nutri === cod_nutri);
+
+    setPacientes(filteredUsers);
+  };
+
+  useEffect(() => {
+    fetchPacientes();
+  }, []);
+
+  const handlePacienteChange = (selectedOption) => {
+    setSelectedPaciente(selectedOption);
+  };
+
+  const handleButtonClick = () => {
+    setShowAgendamento(true);
   };
 
   const validateDate = (selectedDate) => {
@@ -17,62 +53,79 @@ const Agendamento = () => {
     return selectedDate >= currentDate;
   };
 
-  const validateTime = (selectedTime) => {
-    const currentDate = new Date();
-    const currentHour = currentDate.getHours();
-    const currentMinutes = currentDate.getMinutes();
-    const [selectedHour, selectedMinutes] = selectedTime.split(':');
-
-    if (parseInt(selectedHour, 10) === currentHour) {
-      return parseInt(selectedMinutes, 10) > currentMinutes;
-    }
-
-    return parseInt(selectedHour, 10) > currentHour;
-  };
-
   const handleDateChange = (date) => {
     if (validateDate(date)) {
       setStartDate(date);
     } else {
-      // Handle invalid date (e.g., show an error message)
-      console.log("Invalid date selected");
+      alert("Por favor, selecione uma data futura");
     }
   };
 
   const handleTimeChange = (time) => {
-    if (validateTime(time)) {
-      setStartTime(time);
-    } else {
-      // Handle invalid time (e.g., show an error message)
-      console.log("Invalid time selected");
-    }
+    setStartTime(time);
+  };
+
+  const handleAgendamento = async () => {
+    // Combine selected date and time into a single timestamp
+    const selectedDateTime = new Date(startDate);
+    const [hours, minutes] = startTime.split(':');
+    selectedDateTime.setHours(parseInt(hours, 10));
+    selectedDateTime.setMinutes(parseInt(minutes, 10));
+
+    // Convert to Firestore Timestamp
+    const timestamp = Timestamp.fromDate(selectedDateTime);
+
+    const atendColletctionRef = collection(db, "atendimentos");
+    await addDoc(atendColletctionRef, {
+      paciente: selectedPaciente.value.nome, cod_nutri: cod_nutri, cod_paciente: selectedPaciente.value.cod_user,
+      data: timestamp, local: local
+    });
+    alert("Atendimento criado com sucesso!");
+
+    setAtendimentoCreated(true);
+    setShowAgendamento(false);
   };
 
   return (
     <div className="app-container">
+      <ShowAtendimentos onAtendimentoCreated={() => setAtendimentoCreated(false)} />
       <div className="form-group">
-        <label>Paciente</label>
-        <input type="text" placeholder="Selecione o paciente" />
+        {!showAgendamento && <button onClick={handleButtonClick}>Novo Agendamento</button>}
       </div>
 
-      <div className="form-group">
-        <label>Selecione a data</label>
-        <DatePicker selected={startDate} dateFormat="dd/MM/yy" onChange={handleDateChange} />
-      </div>
+      {showAgendamento && (
+        <div>
+          <div className='form-group '>
+            <h2 className='h2-title font-bold'>Selecione o paciente</h2>
+            <Select
+              value={selectedPaciente}
+              onChange={handlePacienteChange}
+              options={pacientes.map((user) => ({ value: user, label: user.nome }))}
+              isSearchable
+            />
+          </div>
 
-      <div>
-        <label>Selecione a hora</label>
-        <TimePicker value={startTime} onChange={handleTimeChange} />
-      </div>
+          <div className="form-group">
+            <label>Selecione a data</label>
+            <DatePicker selected={startDate} dateFormat="dd/MM/yy" onChange={handleDateChange} />
+          </div>
 
-      <div className="form-group">
-        <label>Local</label>
-        <input type="text" placeholder="Digite o local da consulta" />
-      </div>
+          <div class="form-group">
+            <label for="timepicker">Selecione a Hora</label>
+            <input type="time" id="timepicker" value={startTime} onChange={(e) => handleTimeChange(e.target.value)}></input>
+          </div>
 
-      <div className="form-group">
-        <button onClick={handleAgendamento}>Agendar consulta</button>
-      </div>
+          <div className="form-group">
+            <label>Local</label>
+            <input type="text" placeholder="Digite o local da consulta" onChange={(e) => setLocal(e.target.value)} />
+          </div>
+
+          <div className="form-group">
+            <button onClick={handleAgendamento}>Agendar consulta</button>
+            <br></br>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
