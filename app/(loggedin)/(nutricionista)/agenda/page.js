@@ -11,8 +11,14 @@ export default function Agenda() {
           <h2 className='h2-title'>Agendamentos</h2>
         </div>
         <Agendamento />
-        <div className='items-center justify-center flex-col w-full'>
+        <div className='flex pb-[200px]'>
+          <div class="tooltip">Ajuda
+            <span class="tooltiptext">Aqui você vai ver todos os seus agendamentos com os pacientes. Para criar um agendamento basta clicar em "Novo Agendamento",
+              selecionar o paciente e preencher. IMPORTANTE: Você não pode selecionar uma data anterior ao dia de hoje! Certifique-se de escolher uma data futura.
+              Se quiser excluir um atendimento, é só clicar no botão "Excluir" ABAIXO de cada agendamento.</span>
+          </div>
         </div>
+        <br></br>
       </div>
     </main>
   );

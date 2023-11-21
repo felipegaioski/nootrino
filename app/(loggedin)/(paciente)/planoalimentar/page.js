@@ -9,6 +9,10 @@ export default function PlanoAlimentar() {
             <div className='flex items-center justify-start flex-col w-full flex-1'>
                 <br></br>
                 <ShowDieta />
+                <div class="tooltip">Ajuda
+                    <span class="tooltiptext">Aqui é onde você pode ver a sua dieta semanal! Clique nos dias da semana para ver as suas refeições. Se você recebeu um alerta,
+                        é porque o seu / sua nutricionista ainda não criou uma dieta para você.</span>
+                </div>
             </div>
         </main>
     )

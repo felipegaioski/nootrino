@@ -32,6 +32,13 @@ export default function AddPaciente() {
             </div>
     */}
             <ListaPacientes />
+            <div className='flex pb-[200px]'>
+                <div class="tooltip">Ajuda
+                    <span class="tooltiptext">Aqui você pode adicionar um novo paciente! Basta pesquisar, selecioná-lo e clicar em "Adicionar".
+                        (você pode escrever o nome do paciente para encontrá-lo mais rápido). Se você não encontrar o paciente que deseja, certifique-se
+                        de que ele realizou o cadastro na Nootrino!</span>
+                </div>
+            </div>
         </main>
     );
 }

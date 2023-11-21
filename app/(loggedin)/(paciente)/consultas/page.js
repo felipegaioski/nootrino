@@ -11,7 +11,8 @@ export default function Consultas() {
           <h2 className='h2-title'>Atendimentos</h2>
         </div>
         <ShowAtendimentosPaciente />
-        <div className='items-center justify-center flex-col w-full'>
+        <div class="tooltip">Ajuda
+          <span class="tooltiptext">Aqui você pode visualizar as consultas agendadas com seu / sua nutricionista. As consultas já realizadas também estarão aqui!</span>
         </div>
       </div>
     </main>

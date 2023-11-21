@@ -35,7 +35,9 @@ const ShowMedidasPaciente = () => {
                         <p><b>Peso:</b> {medida.peso} kg</p>
                         <p><b>IMC:</b> {medida.imc}</p>
                         <p><b>Porcentagem de gordura:</b> {medida.massa_gorda} %</p>
-                        <p><b>Porcentagem de massa muscular:</b> {medida.massa_muscular} %</p>
+                        <p><b>Circunferência dos braços:</b> {medida.circunferencia_bracos}</p>
+                        <p><b>Circunferência das pernas:</b> {medida.circunferencia_pernas}</p>
+                        <p><b>Circunferência do abdômen:</b> {medida.circunferencia_abdomen}</p>
                         <p><b>Data:</b> {formatDate(medida.data)}</p>
                         <p><b>Observações:</b> {medida.obs}</p>
                         <br></br>

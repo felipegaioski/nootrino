@@ -29,30 +29,37 @@ const CriarAlimento = () => {
             newUnidade.trim() === "" ||
             newCalorias <= 0
         ) {
-            alert("Por favor, preencha todos os atributos do alimento");
+            alert("Por favor, preencha com atributos válidos");
             return;
         }
+
+
         await addDoc(foodColletctionRef, { nome: newNome, quantidade: Number(newQuantidade), porcao: Number(newPorcao), unidade: newUnidade, calorias: newCalorias });
 
         resetForm();
+        document.getElementById("input-name").value = "";
+        document.getElementById("input-quant").value = "";
+        document.getElementById("input-porcao").value = "";
+        document.getElementById("input-unidade").value = "";
+        document.getElementById("input-calorias").value = "";
     }
 
     return (
         <div className='form-group'>
             <label>Nome da comida</label>
-            <input placeholder="Nome" onChange={(event) => { setNewNome(event.target.value) }} />
+            <input id="input-name" placeholder="Nome" onChange={(event) => { setNewNome(event.target.value) }} />
             <br></br>
             <label>Quantidade</label>
-            <input type="number" placeholder="Quantidade em gramas ou ml" onChange={(event) => { setNewQuantidade(event.target.value) }} />
+            <input id="input-quant" type="number" placeholder="Quantidade em gramas ou ml" onChange={(event) => { setNewQuantidade(event.target.value) }} />
             <br></br>
             <label>Porção</label>
-            <input type="number" placeholder="Medida caseira (número)" onChange={(event) => { setNewPorcao(event.target.value) }} />
+            <input id="input-porcao" type="number" placeholder="Medida caseira (número)" onChange={(event) => { setNewPorcao(event.target.value) }} />
             <br></br>
             <label>Unidade</label>
-            <input placeholder="Unidade (ex: fatias, colheres)" onChange={(event) => { setNewUnidade(event.target.value) }} />
+            <input id="input-unidade" placeholder="Unidade (ex: fatias, colheres)" onChange={(event) => { setNewUnidade(event.target.value) }} />
             <br></br>
             <label>Quantidade de calorias</label>
-            <input type="number" placeholder="Calorias" onChange={(event) => { setNewCalorias(event.target.value) }} />
+            <input id="input-calorias" type="number" placeholder="Calorias" onChange={(event) => { setNewCalorias(event.target.value) }} />
             <br></br>
             <button onClick={createFood}> Criar Alimento </button>
         </div>

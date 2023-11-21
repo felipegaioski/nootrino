@@ -24,6 +24,7 @@ const CriarAlimento = ({ onUpdate }) => {
             alert("Por favor, preencha todos os atributos do alimento");
             return;
         }
+
         await addDoc(foodColletctionRef, { nome: newNome, quantidade: Number(newQuantidade), porcao: Number(newPorcao), unidade: newUnidade, calorias: newCalorias });
         onUpdate();
     }

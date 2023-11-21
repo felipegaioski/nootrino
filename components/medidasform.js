@@ -19,6 +19,10 @@ const AtualizarMedida = () => {
   const [codUser, setCodUser] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [medidasCreated, setMedidasCreated] = useState(false);
+  const [newCircunferenciaBracos, setNewCircunferenciaBracos] = useState('');
+  const [newCircunferenciaPernas, setNewCircunferenciaPernas] = useState('');
+  const [newCircunferenciaAbdomen, setNewCircunferenciaAbdomen] = useState('');
+
 
   // const [selectedMedida, setSelectedMedida] = useState(null);
 
@@ -67,9 +71,30 @@ const AtualizarMedida = () => {
     setStartDate(time);
   };
 
+  const validateFields = () => {
+    const peso = Number(newPeso);
+    const altura = Number(newAltura);
+    const percentualGordura = Number(newMassa_gorda);
+
+    if (peso <= 0 || altura <= 0 || percentualGordura <= 0 ||
+      Number(newCircunferenciaBracos) <= 0 ||
+      Number(newCircunferenciaPernas) <= 0 ||
+      Number(newCircunferenciaAbdomen) <= 0) {
+      alert('Todos os campos devem ser maiores que zero.');
+      return false;
+    }
+
+    return true;
+  };
+
+
   const salvarMedida = async () => {
     const selectedDateTime = new Date(startDate);
     const timestamp = Timestamp.fromDate(selectedDateTime);
+
+    if (!validateFields()) {
+      return;
+    }
 
     await addDoc(measuresCollectionRef, {
       altura: newAltura,
@@ -77,7 +102,9 @@ const AtualizarMedida = () => {
       cod_paciente: id,
       data: timestamp,
       massa_gorda: newMassa_gorda,
-      massa_muscular: newMassa_muscular,
+      circunferencia_bracos: Number(newCircunferenciaBracos),
+      circunferencia_pernas: Number(newCircunferenciaPernas),
+      circunferencia_abdomen: Number(newCircunferenciaAbdomen),
       peso: Number(newPeso),
       imc: Number(newImc),
       obs: newObs
@@ -120,7 +147,7 @@ const AtualizarMedida = () => {
     <div className="app-container">
       <ShowMedidas />
       <div className="form-group">
-        {!showForm && <button onClick={handleButtonClick}>Novo Registro de Medida</button>}
+        {!showForm && <button onClick={handleButtonClick}>Novo Registro de Medidas</button>}
       </div>
       {showForm && (<div>
         <div className="form-group">
@@ -181,37 +208,38 @@ const AtualizarMedida = () => {
         </div>
 
         <div className="form-group">
-          <label>Percentual de Músculo</label>
-          <div style={{ position: 'relative', width: '100%' }}>
-            <input
-              type="number"
-              placeholder="         Digite o percentual de massa muscular do paciente."
-              value={newMassa_muscular}
-              onChange={(event) => setNewMassa_muscular(event.target.value)}
-              style={{
-                width: '100%',
-                padding: '10px 15px',
-                borderRadius: '5px',
-                border: '1px solid #ccc',
-                boxSizing: 'border-box',
-                position: 'relative',
-                background: 'transparent',
-                zIndex: '1',
-              }}
-            />
-            <span
-              style={{
-                position: 'absolute',
-                top: '50%',
-                right: '450px',
-                transform: 'translateY(-50%)',
-                zIndex: '2',
-              }}
-            >
-              %
-            </span>
-          </div>
+          <label>Circunferência dos Braços (cm)</label>
+          <input
+            type="number"
+            placeholder="Digite a circunferência dos braços do paciente"
+            value={newCircunferenciaBracos}
+            onChange={(event) => setNewCircunferenciaBracos(event.target.value)}
+            min="0"
+          />
         </div>
+
+        <div className="form-group">
+          <label>Circunferência das Pernas (cm)</label>
+          <input
+            type="number"
+            placeholder="Digite a circunferência das pernas do paciente"
+            value={newCircunferenciaPernas}
+            onChange={(event) => setNewCircunferenciaPernas(event.target.value)}
+            min="0"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Circunferência do Abdômen (cm)</label>
+          <input
+            type="number"
+            placeholder="Digite a circunferência do abdômen do paciente"
+            value={newCircunferenciaAbdomen}
+            onChange={(event) => setNewCircunferenciaAbdomen(event.target.value)}
+            min="0"
+          />
+        </div>
+
 
         <div className="form-group">
           <label>Selecione a data</label>

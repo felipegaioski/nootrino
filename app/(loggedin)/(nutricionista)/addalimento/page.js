@@ -11,7 +11,14 @@ export default function NovoAlimento() {
                     <h2 className='h2-title'>Criar Alimento</h2>
                 </div>
                 <CriarAlimento />
-                <div className='items-center justify-center flex-col w-full'>
+                <div className='flex pb-[200px]'>
+                    <div class="tooltip">Ajuda
+                        <span class="tooltiptext">Aqui você pode adicionar um novo alimento no banco de alimentos. Basta preencher com as informações
+                            corretas e clicar em "Criar Alimento". Depois de criá-lo, ele irá aparecer na criação de dietas!
+                            O formulário segue o padrão da Lista de Substituição de Alimentos. A Quantidade representa o valor da porção em gramas ou mililitros.
+                            A Porção representa a quantidade relativa à medida caseira correspondente. A Unidade representa a medida caseira, ou seja, pode ser
+                            fatias, unidades, colheres, etc. Calorias representa a quantidade de calorias referente à porção do alimento.</span>
+                    </div>
                 </div>
             </div>
         </main>
