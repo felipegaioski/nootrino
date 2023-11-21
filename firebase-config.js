@@ -30,7 +30,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+export const db = getFirestore(app, {
+  experimentalForceLongPolling: true,
+});
 //export const auth = getAuth(app);
 //const analytics = getAnalytics(app);
 
