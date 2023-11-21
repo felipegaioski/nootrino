@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase-config';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { TiDelete } from "react-icons/ti";
 
 const ShowMedidas = ({ onMedidasCreated }) => {
+
+    let codPaciente;
+    // Pegar código a partir da url
+    useEffect(() => {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const { id } = params;
+        codPaciente = id;
+    }, []);
+
     const cod_nutri = localStorage.getItem('cod_user');
     const [medidas, setMedidas] = useState([]);
 
@@ -12,7 +21,7 @@ const ShowMedidas = ({ onMedidasCreated }) => {
         const data = await getDocs(atendColletctionRef);
         const atends = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-        const filteredMedidas = atends.filter(atend => atend.cod_nutri === cod_nutri);
+        const filteredMedidas = atends.filter(atend => atend.cod_nutri === cod_nutri && atend.cod_paciente === codPaciente);
         setMedidas(filteredMedidas);
     };
 
