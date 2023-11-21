@@ -5,12 +5,12 @@ import { FiLogOut } from 'react-icons/fi'
 
 export default function Header() {
     let nome;
-    if (typeof window !== 'undefined' && window.localStorage) {
+    if (typeof window !== 'undefined') {
         nome = localStorage.getItem('nome');
     }
 
     const deleteLocalStorage = () => {
-        if (typeof window !== 'undefined' && window.localStorage) {
+        if (typeof window !== 'undefined') {
             localStorage.removeItem('nome');
             localStorage.removeItem('cod_user');
             localStorage.removeItem('nome_nutri');
