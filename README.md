@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+Para rodar o projeto na sua máquina, abra um cmd na pasta e execute o comando "npm install next".
+
 ## Getting Started
 
 First, run the development server:
