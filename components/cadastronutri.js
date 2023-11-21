@@ -20,6 +20,11 @@ const Form = () => {
 
   const handleChange = async () => {
 
+    if (password.length < 8) {
+      alert("A senha deve ter pelo menos 8 caracteres.");
+      return;
+    };
+
     const usersColletctionRef = collection(db, "user")
     const data = await getDocs(usersColletctionRef);
     const users = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
