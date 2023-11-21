@@ -32,12 +32,14 @@ const AtualizarMedida = () => {
     cod_nutri = localStorage.getItem('cod_user');
   }
 
-  //let codPaciente;
+  let codPaciente;
   // Pegar código a partir da url
-  const urlSearchParams = new URLSearchParams(window.location.search);
-  const params = Object.fromEntries(urlSearchParams.entries());
-  const { id } = params;
-  //codPaciente = id;
+  useEffect(() => {
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+    const { id } = params;
+    codPaciente = id;
+  }, []);
 
   const handleButtonClick = () => {
     setShowForm(!showForm);
