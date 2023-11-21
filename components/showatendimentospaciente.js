@@ -4,10 +4,10 @@ import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 
 const ShowAtendimentosPaciente = () => {
     let cod_user;
-    let nome;
+    let nome_nutri;
     if (typeof window !== 'undefined') {
         cod_user = localStorage.getItem('cod_user');
-        nome = localStorage.getItem('nome_nutri');
+        nome_nutri = localStorage.getItem('nome_nutri');
     }
     const [atendimentos, setAtendimentos] = useState([]);
 
