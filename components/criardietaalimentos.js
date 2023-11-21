@@ -7,7 +7,10 @@ import CriarAlimento from './criaralimento';
 import DayButtons from './show';
 
 const MealPlanBuilder = () => {
-  const cod_nutri = localStorage.getItem('cod_user');
+  let cod_nutri;
+  if (typeof window !== 'undefined') {
+    cod_nutri = localStorage.getItem('cod_user');
+  }
   let codPaciente;
 
   // Pegar código a partir da url
@@ -260,7 +263,9 @@ const MealPlanBuilder = () => {
 
     if (dieta_doc) {
       setDieta(dieta_doc);
-      localStorage.setItem('doc_id', dieta_doc.id);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('doc_id', dieta_doc.id);
+      }
     } else {
       dieta.cod_paciente = codPaciente;
       dieta.cod_nutri = cod_nutri;
@@ -305,7 +310,7 @@ const MealPlanBuilder = () => {
         setSelectedDay(null);
         setSelectedQuant(null);
       } else {
-        console.log(dieta)
+        //console.log(dieta)
         alert('Dia ou Refeição inválida');
       }
     } else {

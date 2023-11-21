@@ -1,15 +1,20 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FaAppleAlt, FaUserAlt } from 'react-icons/fa'
 import { FiLogOut } from 'react-icons/fi'
 
 export default function Header() {
-    const nome = localStorage.getItem('nome');
+    let nome;
+    if (typeof window !== 'undefined' && window.localStorage) {
+        nome = localStorage.getItem('nome');
+    }
 
     const deleteLocalStorage = () => {
-        localStorage.removeItem('nome');
-        localStorage.removeItem('cod_user');
-        localStorage.removeItem('nome_nutri');
+        if (typeof window !== 'undefined' && window.localStorage) {
+            localStorage.removeItem('nome');
+            localStorage.removeItem('cod_user');
+            localStorage.removeItem('nome_nutri');
+        }
     }
 
     return (

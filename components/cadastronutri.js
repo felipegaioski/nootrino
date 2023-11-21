@@ -60,8 +60,10 @@ const Form = () => {
       nome: nome, email: email, senha: password, paciente: false, ativo: true,
       crn: selectedCrn.value, inscricao: inscricao, cod_user: cod
     });
-    localStorage.setItem('nome', nome);
-    localStorage.setItem('cod_user', cod);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('nome', nome);
+      localStorage.setItem('cod_user', cod);
+    }
     alert("Cadastro realizado com sucesso!");
     push('/home');
   }

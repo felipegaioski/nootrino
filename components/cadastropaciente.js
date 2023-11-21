@@ -54,8 +54,10 @@ const Form = () => {
     };
 
     addDoc(usersColletctionRef, { nome: nome, email: email, senha: password, paciente: true, ativo: true, cod_user: cod });
-    localStorage.setItem('nome', nome);
-    localStorage.setItem('cod_user', cod);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('nome', nome);
+      localStorage.setItem('cod_user', cod);
+    }
     alert("Cadastro realizado com sucesso!");
     push('/homepaciente');
   }

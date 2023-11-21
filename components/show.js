@@ -8,7 +8,10 @@ function DayButtons({ dieta, setDieta }) {
   const [day, setDay] = useState('');
 
   const dietaColletctionRef = collection(db, "dietas")
-  const doc_id = localStorage.getItem('doc_id');
+  let doc_id;
+  if (typeof window !== 'undefined') {
+    doc_id = localStorage.getItem('doc_id');
+  }
 
   const salvarDieta = async () => {
 

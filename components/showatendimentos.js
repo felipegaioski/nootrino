@@ -4,7 +4,10 @@ import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { TiDelete } from "react-icons/ti";
 
 const ShowAtendimentos = ({ onAtendimentoCreated }) => {
-    const cod_nutri = localStorage.getItem('cod_user');
+    let cod_nutri;
+    if (typeof window !== 'undefined') {
+        cod_nutri = localStorage.getItem('cod_user');
+    }
     const [atendimentos, setAtendimentos] = useState([]);
 
     const fetchAtendimentos = async () => {

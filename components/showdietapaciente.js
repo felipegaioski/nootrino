@@ -7,7 +7,10 @@ import 'firebase/firestore';
 function ShowDieta() {
     const [day, setDay] = useState('');
 
-    const codPaciente = localStorage.getItem('cod_user');
+    let codPaciente;
+    if (typeof window !== 'undefined') {
+        codPaciente = localStorage.getItem('cod_user');
+    }
 
     const dietaColletctionRef = collection(db, "dietas")
 

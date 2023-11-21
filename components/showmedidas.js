@@ -13,7 +13,10 @@ const ShowMedidas = ({ onMedidasCreated }) => {
         codPaciente = id;
     }, []);
 
-    const cod_nutri = localStorage.getItem('cod_user');
+    let cod_nutri;
+    if (typeof window !== 'undefined') {
+        cod_nutri = localStorage.getItem('cod_user');
+    }
     const [medidas, setMedidas] = useState([]);
 
     const fetchMedidas = async () => {

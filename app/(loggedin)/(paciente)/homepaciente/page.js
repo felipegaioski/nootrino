@@ -7,7 +7,10 @@ import { IoIosWater } from "react-icons/io";
 import { FaQuestion } from "react-icons/fa";
 
 export default function HomePaciente() {
-  let nome_nutri = localStorage.getItem('nome_nutri');
+  let nome_nutri;
+  if (typeof window !== 'undefined') {
+    nome_nutri = localStorage.getItem('nome_nutri');
+  }
   let phrase = "";
   if (!nome_nutri) {
     phrase = "Ainda não há um(a) nutricionista para você."

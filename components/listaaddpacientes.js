@@ -9,7 +9,10 @@ const ListaPacientes = () => {
     const [pacientes, setPacientes] = useState([]);
     const [usersColletctionRef, setUsersColletctionRef] = useState(null);
 
-    const cod_nutri = localStorage.getItem('cod_user');
+    let cod_nutri;
+    if (typeof window !== 'undefined') {
+        cod_nutri = localStorage.getItem('cod_user');
+    }
     //console.log(cod_nutri)
 
     const fetchPacientes = async () => {

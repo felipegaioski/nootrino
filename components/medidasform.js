@@ -26,7 +26,10 @@ const AtualizarMedida = () => {
 
   // const [selectedMedida, setSelectedMedida] = useState(null);
 
-  const cod_nutri = localStorage.getItem('cod_user');
+  let cod_nutri;
+  if (typeof window !== 'undefined') {
+    cod_nutri = localStorage.getItem('cod_user');
+  }
 
   //let codPaciente;
   // Pegar código a partir da url

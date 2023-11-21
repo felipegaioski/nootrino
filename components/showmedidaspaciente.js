@@ -3,8 +3,12 @@ import { db } from '../firebase-config';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 
 const ShowMedidasPaciente = () => {
-    const cod_user = localStorage.getItem('cod_user');
-    const nome_nutri = localStorage.getItem('nome_nutri');
+    let cod_user;
+    let nome_nutri;
+    if (typeof window !== 'undefined') {
+        cod_user = localStorage.getItem('cod_user');
+        nome_nutri = localStorage.getItem('nome_nutri');
+    }
     const [medidas, setMedidas] = useState([]);
 
     const fetchMedidas = async () => {

@@ -31,14 +31,18 @@ const Form = () => {
       setUser(foundUser);
 
       if (foundUser.senha === password) {
-        localStorage.setItem('cod_user', foundUser.cod_user);
-        localStorage.setItem('nome', foundUser.nome);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('cod_user', foundUser.cod_user);
+          localStorage.setItem('nome', foundUser.nome);
+        }
         if (foundUser.paciente) {
           if (foundUser.cod_nutri != null) {
             users.forEach((u) => {
               if (u.cod_user == foundUser.cod_nutri) {
                 //alert(u.nome)
-                localStorage.setItem('nome_nutri', u.nome);
+                if (typeof window !== 'undefined') {
+                  localStorage.setItem('nome_nutri', u.nome);
+                }
               }
             });
           }
