@@ -36,19 +36,38 @@ const ShowAtendimentos = ({ onAtendimentoCreated }) => {
     };
 
     return (
-        <div>
-            <div className='form-group'>
-                {atendimentos.map((atendimento, index) => (
-                    <div key={index}>
-                        <p><b>Paciente:</b> {atendimento.paciente}</p>
-                        <p><b>Data:</b> {formatDate(atendimento.data)}</p>
-                        <p><b>Local:</b> {atendimento.local}</p>
-                        <button onClick={() => handleDelete(atendimento.id)}><TiDelete size={25} color="white" />Excluir</button>
-                        <br></br>
-                    </div>
-                ))}
+        <div className="container mx-auto p-4">
+            <div className="bg-white shadow-md rounded my-6">
+                <table className="min-w-full border">
+                    <thead>
+                        <tr>
+                            <th className="border-b">Paciente</th>
+                            <th className="border-b">Data</th>
+                            <th className="border-b">Local</th>
+                            <th className="border-b"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {atendimentos.map((atendimento, index) => (
+                            <tr key={index} className="hover:bg-gray-100">
+                                <td className="py-2 px-4 border-b">{atendimento.paciente}</td>
+                                <td className="py-2 px-4 border-b">{formatDate(atendimento.data)}</td>
+                                <td className="py-2 px-4 border-b">{atendimento.local}</td>
+                                <td className="py-2 px-4 border-b">
+                                    <button
+                                        onClick={() => handleDelete(atendimento.id)}
+                                        className="bg-red-500 text-white px-4 py-2 rounded"
+                                    >
+                                        Excluir
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </div>
+
     );
 }
 

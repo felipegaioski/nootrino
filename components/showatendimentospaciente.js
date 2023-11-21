@@ -27,18 +27,29 @@ const ShowAtendimentosPaciente = () => {
     };
 
     return (
-        <div>
-            <div className='form-group'>
-                {atendimentos.map((atendimento, index) => (
-                    <div key={index}>
-                        <p><b className='text-green'>Nutricionista:</b> {nome_nutri}</p>
-                        <p><b className='text-green'>Data:</b> {formatDate(atendimento.data)}</p>
-                        <p><b className='text-green'>Local:</b> {atendimento.local}</p>
-                        <br></br>
-                    </div>
-                ))}
+        <div className="container mx-auto p-4">
+            <div className="bg-white shadow-md rounded my-6">
+                <table className="min-w-full border">
+                    <thead>
+                        <tr>
+                            <th className="border-b">Nutricionista</th>
+                            <th className="border-b">Data</th>
+                            <th className="border-b">Local</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {atendimentos.map((atendimento, index) => (
+                            <tr key={index} className="hover:bg-gray-100">
+                                <td className="py-2 px-4 border-b">{nome_nutri}</td>
+                                <td className="py-2 px-4 border-b">{formatDate(atendimento.data)}</td>
+                                <td className="py-2 px-4 border-b">{atendimento.local}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </div>
+
     );
 }
 
