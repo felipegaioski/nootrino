@@ -9,20 +9,12 @@ import { FaQuestion } from "react-icons/fa";
 
 export default function Home() {
   const openPdf = () => {
-    // Replace 'path/to/your/file.pdf' with the actual path to your PDF file
     window.open('/lista_substituicao.pdf', '_blank');
   };
 
   return (
     <main className='ml-[80px] pt-[60px] flex gap-[20px] px-[20px]'>
       <div className='flex items-center justify-start flex-col w-full flex-1'>
-        {/* 
-        <div className='flex items-center justify-start flex-col gap-[20px] max-w-[350px]'>
-          <h4 className='text-blue font-bold text-center'>Seu profissional ainda não disponibilizou nenhum plano alimentar</h4>
-          <img src="https://dietbox.azureedge.net/static/Images/noplan.png" alt="" />
-          <button className='text-[12px] bg-gray/10 px-[20px] py-[10px] rounded-[5px] text-black/60'>Entre em contato com seu (sua) nutricionista</button>
-        </div>
-        */}
         <div className='flex gap-[10px] w-full py-[20px] justify-center'>
           <a href="/pacientes" className='bg-blue p-[10px] rounded-[5px] w-full'>
             <h6 className='text-white font-bold text-[30px]'>Seus Pacientes</h6>

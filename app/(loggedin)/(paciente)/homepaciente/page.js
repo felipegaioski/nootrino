@@ -19,7 +19,6 @@ export default function HomePaciente() {
   }
 
   const openPdf = () => {
-    // Replace 'path/to/your/file.pdf' with the actual path to your PDF file
     window.open('/lista_substituicao.pdf', '_blank');
   };
 

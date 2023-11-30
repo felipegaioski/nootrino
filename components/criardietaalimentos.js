@@ -283,8 +283,6 @@ const MealPlanBuilder = () => {
   }, []);
 
   const foodColletctionRef = collection(db, "alimentos")
-
-  //Buscar no firebase as comidas na collection alimentos
   const fetchFoodData = async () => {
     try {
       const snapshot = await getDocs(foodColletctionRef);
@@ -295,7 +293,6 @@ const MealPlanBuilder = () => {
     }
   };
 
-  // Adiciona a comida selecionada no lugar certo na estrutura dieta
   const addFoodToMealPlan = () => {
     if (selectedFood && selectedMeal && selectedDay) {
 
@@ -320,9 +317,9 @@ const MealPlanBuilder = () => {
         dieta.dias[selectedDay.value].refeicoes[selectedMeal.value].comidas.push(food);
 
         setSelectedFood(null);
-        setSelectedMeal(null);
-        setSelectedDay(null);
-        setSelectedQuant(null);
+        //setSelectedMeal(null);
+        //setSelectedDay(null);
+        //setSelectedQuant(null);
       } else {
         //console.log(dieta)
         alert('Dia ou Refeição inválida');
