@@ -26,6 +26,7 @@ const CriarAlimento = ({ onUpdate }) => {
         }
 
         await addDoc(foodColletctionRef, { nome: newNome, quantidade: Number(newQuantidade), porcao: Number(newPorcao), unidade: newUnidade, calorias: newCalorias });
+        alert('Alimento criado com sucesso!');
         onUpdate();
     }
 

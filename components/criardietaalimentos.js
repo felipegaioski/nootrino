@@ -15,10 +15,12 @@ const MealPlanBuilder = () => {
 
   // Pegar código a partir da url
   useEffect(() => {
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const params = Object.fromEntries(urlSearchParams.entries());
-    const { id } = params;
-    codPaciente = id;
+    if (typeof window !== 'undefined') {
+      const urlSearchParams = new URLSearchParams(window.location.search);
+      const params = Object.fromEntries(urlSearchParams.entries());
+      const { id } = params;
+      codPaciente = id;
+    }
   }, []);
 
   // Aparecer a Criação de alimento quando clica o botão Novo Alimento
@@ -254,6 +256,8 @@ const MealPlanBuilder = () => {
     calorias: 0
   };
 
+  let dieta_id;
+
   const fetchDietaData = async () => {
     // buscar dieta no firebase
     const dietaColletctionRef = collection(db, "dietas");
@@ -265,8 +269,10 @@ const MealPlanBuilder = () => {
       setDieta(dieta_doc);
       if (typeof window !== 'undefined') {
         localStorage.setItem('doc_id', dieta_doc.id);
+        dieta_id = dieta_doc.id;
       }
     } else {
+      //alert(codPaciente)
       dieta.cod_paciente = codPaciente;
       dieta.cod_nutri = cod_nutri;
     }
@@ -293,11 +299,19 @@ const MealPlanBuilder = () => {
   const addFoodToMealPlan = () => {
     if (selectedFood && selectedMeal && selectedDay) {
 
+      if (selectedQuant === null) {
+        alert("Informe a quantidade do alimento");
+        return;
+      }
+
       food = JSON.parse(JSON.stringify(selectedFood.value));
       food.quantidade = selectedQuant;
       food.porcao = Math.round(parseFloat(selectedQuant * Number(selectedFood.value.porcao) / Number(selectedFood.value.quantidade)).toFixed());
-      food.calorias = parseFloat(selectedQuant * Number(selectedFood.value.calorias) / Number(selectedFood.value.quantidade));
-      food.calorias.toFixed(1);
+      if (food.porcao == 0) {
+        food.porcao = 1;
+      }
+      food.calorias = parseFloat((selectedQuant * Number(selectedFood.value.calorias) / Number(selectedFood.value.quantidade)).toFixed(1));
+      //food.calorias.toFixed(1);
 
       if (
         dieta.dias[selectedDay.value] &&
@@ -434,8 +448,7 @@ const MealPlanBuilder = () => {
         />
       </div>
       <br></br>
-
-      <DayButtons dieta={dieta} setDieta={setDieta} />
+      <DayButtons dieta={dieta} setDieta={setDieta} dieta_id={dieta_id} codpaciente={codPaciente} />
       <br></br>
       <br></br>
     </div>

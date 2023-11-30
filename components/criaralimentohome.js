@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { db } from '../firebase-config';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, getDocs, doc } from 'firebase/firestore';
 import 'firebase/firestore';
 
 const CriarAlimento = () => {
@@ -35,6 +35,8 @@ const CriarAlimento = () => {
 
 
         await addDoc(foodColletctionRef, { nome: newNome, quantidade: Number(newQuantidade), porcao: Number(newPorcao), unidade: newUnidade, calorias: newCalorias });
+
+        alert('Alimento criado com sucesso!');
 
         resetForm();
         document.getElementById("input-name").value = "";

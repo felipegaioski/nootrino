@@ -34,12 +34,14 @@ const AtualizarMedida = () => {
 
   let codPaciente;
   // Pegar código a partir da url
-  useEffect(() => {
+  //useEffect(() => {
+  if (typeof window !== 'undefined') {
     const urlSearchParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlSearchParams.entries());
     const { id } = params;
     codPaciente = id;
-  }, []);
+  }
+  //}, []);
 
   const handleButtonClick = () => {
     setShowForm(!showForm);
@@ -105,7 +107,7 @@ const AtualizarMedida = () => {
     await addDoc(measuresCollectionRef, {
       altura: newAltura,
       cod_nutri: cod_nutri,
-      cod_paciente: id,
+      cod_paciente: codPaciente,
       data: timestamp,
       massa_gorda: newMassa_gorda,
       circunferencia_bracos: Number(newCircunferenciaBracos),

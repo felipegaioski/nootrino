@@ -1,24 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../firebase-config';
-import { collection, setDoc, updateDoc, doc, addDoc } from 'firebase/firestore';
+import { collection, setDoc, updateDoc, doc, addDoc, getDocs } from 'firebase/firestore';
 import { TiDelete } from "react-icons/ti";
 import 'firebase/firestore';
 
-function DayButtons({ dieta, setDieta }) {
+function DayButtons({ dieta, setDieta, doc_id }) {
   const [day, setDay] = useState('');
 
   const dietaColletctionRef = collection(db, "dietas")
-  let doc_id;
+  // let doc_id;
+  // if (typeof window !== 'undefined') {
+  //   doc_id = localStorage.getItem('doc_id');
+  // }
+
+  let codPaciente;
+  // Pegar código a partir da url
+  //useEffect(() => {
   if (typeof window !== 'undefined') {
-    doc_id = localStorage.getItem('doc_id');
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+    const { id } = params;
+    codPaciente = id;
   }
+  //}, []);
 
   const salvarDieta = async () => {
 
-    if (doc_id) {
-      const dieta_doc = doc(db, "dietas", doc_id);
+    const data = await getDocs(collection(db, "dietas"));
+    const dietas = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+    let foundDieta = null;
+
+    dietas.forEach((d) => {
+      if (d.cod_paciente === codPaciente) {
+        foundDieta = d;
+      }
+    });
+
+    if (foundDieta) {
+      const dieta_doc = doc(db, "dietas", foundDieta.id);
       await updateDoc(dieta_doc, dieta);
       //localStorage.removeItem('doc_id');
+      foundDieta = null;
     } else {
       await addDoc(dietaColletctionRef, dieta);
     }
@@ -40,9 +63,11 @@ function DayButtons({ dieta, setDieta }) {
   };
 
   const calculateTotalCalories = () => {
-    let totalCalories = 0;
+    const totalCaloriesPerDay = {};
 
     Object.keys(dieta.dias).forEach((dia) => {
+      let totalCalories = 0;
+
       Object.keys(dieta.dias[dia].refeicoes).forEach((refeicao) => {
         const comidas = dieta.dias[dia].refeicoes[refeicao].comidas;
 
@@ -50,9 +75,11 @@ function DayButtons({ dieta, setDieta }) {
           totalCalories += parseFloat(comida.calorias);
         });
       });
+
+      totalCaloriesPerDay[dia] = totalCalories.toFixed(1);
     });
 
-    return totalCalories.toFixed(1);
+    return totalCaloriesPerDay;
   };
 
   const renderComidas = (refeicao) => {
@@ -146,8 +173,12 @@ function DayButtons({ dieta, setDieta }) {
       <br></br>
 
       <div>
-        <p><b>Calorias Totais:</b> {calculateTotalCalories()} kCal</p>
+        {day && (
+          <p><b>Total de Calorias :</b> {calculateTotalCalories()[day]} kCal</p>
+        )}
       </div>
+
+
       <div className='form-group'>
         <button onClick={salvarDieta}> Salvar Dieta </button>
       </div>
