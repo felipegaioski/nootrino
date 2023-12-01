@@ -44,7 +44,7 @@ const Lista = () => {
                             <div className="flex gap-20 font-medium">
                                 <Link href={{
                                     pathname: `/dieta/`,
-                                    query: { id: paciente.cod_user }
+                                    query: { id: paciente.cod_user, nome: paciente.nome }
                                 }}
                                     className="flex items-center">
                                     <BiSolidFoodMenu size={23} color="#00d46a" />
@@ -52,7 +52,7 @@ const Lista = () => {
                                 </Link>
                                 <Link href={{
                                     pathname: `/medidas/`,
-                                    query: { id: paciente.cod_user }
+                                    query: { id: paciente.cod_user, nome: paciente.nome }
                                 }} className="flex items-center">
                                     <FaEdit size={23} color="#00d46a" />
                                     <span>Editar medidas</span>

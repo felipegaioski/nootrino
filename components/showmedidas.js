@@ -4,14 +4,15 @@ import { db } from '../firebase-config';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 
 const ShowMedidas = ({ onMedidasCreated }) => {
-
+    const [nomePaciente, setNomePaciente] = useState('');
     let codPaciente;
     // Pegar código a partir da url
     useEffect(() => {
         const urlSearchParams = new URLSearchParams(window.location.search);
         const params = Object.fromEntries(urlSearchParams.entries());
-        const { id } = params;
+        const { id, nome } = params;
         codPaciente = id;
+        setNomePaciente(nome);
     }, []);
 
     let cod_nutri;
@@ -51,6 +52,9 @@ const ShowMedidas = ({ onMedidasCreated }) => {
 
     return (
         <div className="container mx-auto p-4">
+            <div>
+                <h1 className='text-xl font-bold text-green'>{nomePaciente}</h1>
+            </div>
             <div className="bg-white shadow-md rounded my-6">
                 <table className="min-w-full border">
                     <thead>
