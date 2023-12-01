@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { db } from '../firebase-config';
-import { collection, addDoc, deleteDoc, getDocs, doc } from 'firebase/firestore';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 import 'firebase/firestore';
 
 const CriarAlimento = () => {
@@ -33,10 +33,15 @@ const CriarAlimento = () => {
             return;
         }
 
+        const data = await getDocs(foodColletctionRef);
+        const comidas = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+        const hasDuplicate = comidas.some((comida) => comida.nome.toLowerCase() === newNome.toLowerCase());
 
-        await addDoc(foodColletctionRef, { nome: newNome, quantidade: Number(newQuantidade), porcao: Number(newPorcao), unidade: newUnidade, calorias: newCalorias });
-
-        alert('Alimento criado com sucesso!');
+        if (hasDuplicate) {
+            alert(`Já existe um alimento com o nome ${newNome}!`);
+        } else {
+            await addDoc(foodColletctionRef, { nome: newNome, quantidade: Number(newQuantidade), porcao: Number(newPorcao), unidade: newUnidade, calorias: newCalorias });
+        };
 
         resetForm();
         document.getElementById("input-name").value = "";

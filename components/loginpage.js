@@ -5,6 +5,7 @@ import { db } from '../firebase-config';
 import { collection, getDocs } from 'firebase/firestore';
 import 'firebase/firestore';
 import { useRouter } from 'next/navigation';
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const Form = () => {
 
@@ -13,6 +14,7 @@ const Form = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = async () => {
     const usersCollectionRef = collection(db, "user");
@@ -34,12 +36,11 @@ const Form = () => {
         if (typeof window !== 'undefined') {
           localStorage.setItem('cod_user', foundUser.cod_user);
           localStorage.setItem('nome', foundUser.nome);
-        }
+        };
         if (foundUser.paciente) {
           if (foundUser.cod_nutri != null) {
             users.forEach((u) => {
               if (u.cod_user == foundUser.cod_nutri) {
-                //alert(u.nome)
                 if (typeof window !== 'undefined') {
                   localStorage.setItem('nome_nutri', u.nome);
                 }
@@ -68,6 +69,10 @@ const Form = () => {
     setPassword(event.target.value);
   }
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  }
+
   return (
     <div className="app-container">
       <div className="form-group">
@@ -82,11 +87,18 @@ const Form = () => {
       <div className="form-group">
         <label>Senha</label>
         <input
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Senha"
+          value={password}
           onChange={(event) => { handlePassword(event) }}
         />
+        <div className='items-end'>
+          <button className="text-xs max-w-[100px]" onClick={togglePasswordVisibility}>
+            {showPassword ? <FaRegEyeSlash color={"black"} /> : <FaRegEye color={"black"} />}
+          </button>
+        </div>
       </div>
+
       <div className="form-group">
         <button onClick={handleChange}>Login</button>
       </div>

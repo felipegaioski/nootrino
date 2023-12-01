@@ -1,29 +1,44 @@
 'use client'
-//import { useForm } from "react-hook-form";
-
 import React, { useState } from 'react';
 import { db } from '../firebase-config';
 import { collection, getDocs, addDoc } from 'firebase/firestore';
 import 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import Select from 'react-select'
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const Form = () => {
   const { push } = useRouter();
-
-  //const { register, handleSubmit, formState: { errors } } = useForm();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [nome, setNome] = useState('');
   const [selectedCrn, setSelectedCrn] = useState(null);
   const [inscricao, setInscricao] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const isEmailValid = (email) => {
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleChange = async () => {
 
-    if (password.length < 8) {
-      alert("A senha deve ter pelo menos 8 caracteres.");
+    if (!nome || !email || !password || !confirmPassword) {
+      alert("Por favor, preencha todos os campos.");
       return;
-    };
+    }
+
+    if (!isEmailValid(email)) {
+      alert("Por favor, insira um endereço de e-mail válido.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert("As senhas não coincidem. Por favor, insira senhas iguais.");
+      return;
+    }
 
     const usersColletctionRef = collection(db, "user")
     const data = await getDocs(usersColletctionRef);
@@ -93,6 +108,14 @@ const Form = () => {
     setInscricao(event.target.value);
   };
 
+  const handleConfirmPassword = (event) => {
+    setConfirmPassword(event.target.value);
+  }
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  }
+
   return (
     <div className="app-container">
       <div className="form-group">
@@ -116,9 +139,25 @@ const Form = () => {
       <div className="form-group">
         <label>Senha</label>
         <input
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Senha"
+          value={password}
           onChange={(event) => { handlePassword(event) }}
+        />
+        <div className='items-end'>
+          <button className="text-xs max-w-[100px]" type="button" onClick={togglePasswordVisibility}>
+            {showPassword ? <FaRegEyeSlash color={"black"} /> : <FaRegEye color={"black"} />}
+          </button>
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label>Confirmar Senha</label>
+        <input
+          type="password"
+          placeholder="Confirmar senha"
+          value={confirmPassword}
+          onChange={(event) => { handleConfirmPassword(event) }}
         />
       </div>
 
