@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase-config';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { TiDelete } from "react-icons/ti";
+import Swal from 'sweetalert2';
 
 const ShowAtendimentos = ({ onAtendimentoCreated }) => {
     let cod_nutri;
@@ -20,12 +20,30 @@ const ShowAtendimentos = ({ onAtendimentoCreated }) => {
     };
 
     const handleDelete = async (atendimentoId) => {
-        try {
-            await deleteDoc(doc(db, 'atendimentos', atendimentoId));
-            fetchAtendimentos();
-        } catch (error) {
-            console.error("Error deleting atendimento: ", error);
-        }
+        Swal.fire({
+            title: "Deseja realmente excluir esse atendimento?",
+            text: "Não será possível recuperá-lo!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#32bb67",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Excluir",
+            cancelButtonText: "Cancelar"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await deleteDoc(doc(db, 'atendimentos', atendimentoId));
+                    fetchAtendimentos();
+                } catch (error) {
+                    console.error("Error deleting atendimento: ", error);
+                }
+                // Swal.fire({
+                //     title: "Atendimento excluído!",
+                //     icon: "success",
+                //     confirmButtonColor: "#32bb67"
+                // });
+            }
+        });
     };
 
     useEffect(() => {

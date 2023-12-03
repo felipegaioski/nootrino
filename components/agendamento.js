@@ -83,7 +83,7 @@ const Agendamento = () => {
       paciente: selectedPaciente.value.nome, cod_nutri: cod_nutri, cod_paciente: selectedPaciente.value.cod_user,
       data: timestamp, local: local
     });
-    alert("Atendimento criado com sucesso!");
+    //alert("Atendimento criado com sucesso!");
 
     setAtendimentoCreated(true);
     setShowAgendamento(false);

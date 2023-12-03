@@ -2,16 +2,17 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase-config';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import Swal from 'sweetalert2';
 
 const ShowMedidas = ({ onMedidasCreated }) => {
     const [nomePaciente, setNomePaciente] = useState('');
-    let codPaciente;
+    const [codPaciente, setCodPaciente] = useState(null);
     // Pegar código a partir da url
     useEffect(() => {
         const urlSearchParams = new URLSearchParams(window.location.search);
         const params = Object.fromEntries(urlSearchParams.entries());
         const { id, nome } = params;
-        codPaciente = id;
+        setCodPaciente(id);
         setNomePaciente(nome);
     }, []);
 
@@ -31,12 +32,30 @@ const ShowMedidas = ({ onMedidasCreated }) => {
     };
 
     const handleDelete = async (medidaId) => {
-        try {
-            await deleteDoc(doc(db, 'medidas', medidaId));
-            fetchMedidas();
-        } catch (error) {
-            console.error("Error deleting medidas: ", error);
-        }
+        Swal.fire({
+            title: "Deseja realmente excluir essa medida?",
+            text: "Não será possível recuperá-la!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#32bb67",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Excluir",
+            cancelButtonText: "Cancelar"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await deleteDoc(doc(db, 'medidas', medidaId));
+                    fetchMedidas();
+                } catch (error) {
+                    console.error("Error deleting medidas: ", error);
+                }
+                // Swal.fire({
+                //     title: "Medida excluída!",
+                //     icon: "success",
+                //     confirmButtonColor: "#32bb67"
+                // });
+            }
+        });
     };
 
     useEffect(() => {

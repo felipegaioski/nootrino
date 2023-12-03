@@ -1,11 +1,10 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase-config';
-import { collection, addDoc, doc, getDoc, Timestamp } from 'firebase/firestore';
+import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import 'firebase/firestore';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import Select from 'react-select'
 import ShowMedidas from '@/components/showmedidas'
 
 const AtualizarMedida = () => {
@@ -13,19 +12,13 @@ const AtualizarMedida = () => {
   const [newAltura, setNewAltura] = useState('');
   const [newObs, setNewObs] = useState('');
   const [startDate, setStartDate] = useState(new Date());
-  const [startTime, setStartTime] = useState('12:00'); // Initial time value
   const [newMassa_gorda, setNewMassa_gorda] = useState('');
-  const [newMassa_muscular, setNewMassa_muscular] = useState('');
   const [newImc, setNewImc] = useState(null);
-  const [codUser, setCodUser] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [medidasCreated, setMedidasCreated] = useState(false);
   const [newCircunferenciaBracos, setNewCircunferenciaBracos] = useState('');
   const [newCircunferenciaPernas, setNewCircunferenciaPernas] = useState('');
   const [newCircunferenciaAbdomen, setNewCircunferenciaAbdomen] = useState('');
-
-
-  // const [selectedMedida, setSelectedMedida] = useState(null);
 
   let cod_nutri;
   if (typeof window !== 'undefined') {
@@ -59,7 +52,6 @@ const AtualizarMedida = () => {
 
   const calcularImc = () => {
     if (!newPeso.trim() || !newAltura.trim()) {
-      // If either newPeso or newAltura is empty or contains only whitespace
       return;
     }
 
@@ -75,8 +67,17 @@ const AtualizarMedida = () => {
     setNewImc(imcValue.toFixed(2));
   };
 
-  const handleDateChange = (time) => {
-    setStartDate(time);
+  const validateDate = (selectedDate) => {
+    const currentDate = new Date();
+    return selectedDate <= currentDate;
+  };
+
+  const handleDateChange = (date) => {
+    if (validateDate(date)) {
+      setStartDate(date);
+    } else {
+      alert("Por favor, selecione uma data válida");
+    }
   };
 
   const validateFields = () => {
@@ -118,7 +119,7 @@ const AtualizarMedida = () => {
       obs: newObs
     });
 
-    alert("Registro de medidas criado com sucesso!");
+    //alert("Registro de medidas criado com sucesso!");
 
     setMedidasCreated(true);
     setShowForm(false);
@@ -132,28 +133,17 @@ const AtualizarMedida = () => {
     setNewAltura(event.target.value);
   };
 
+  const handleMedidaCreated = () => {
+    setMedidasCreated(!medidasCreated);
+  };
+
   useEffect(() => {
     calcularImc();
   }, [newPeso, newAltura]);
 
-  // const handleEditClick = async (medidaId) => {
-  //   const medidaDoc = await getDoc(doc(db, 'medidas', medidaId));
-  //   const medidaData = medidaDoc.data();
-  //   setSelectedMedida({
-  //     peso: medidaData.peso.toString(),
-  //     altura: medidaData.altura.toString(),
-  //     obs: medidaData.obs,
-  //     massa_gorda: medidaData.massa_gorda.toString(),
-  //     massa_muscular: medidaData.massa_muscular.toString(),
-  //     imc: medidaData.imc ? medidaData.imc.toString() : null,
-  //     date: medidaData.data.toDate(),
-  //   });
-  //   setShowForm(true);
-  // };
-
   return (
     <div className="app-container">
-      <ShowMedidas />
+      <ShowMedidas onMedidasCreated={handleMedidaCreated} />
       <div className="form-group">
         {!showForm && <button onClick={handleButtonClick}>Novo Registro de Medidas</button>}
       </div>

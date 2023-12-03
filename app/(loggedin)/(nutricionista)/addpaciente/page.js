@@ -12,25 +12,6 @@ export default function AddPaciente() {
                     <p>Selecione o usuário para adicioná-lo aos seus pacientes</p>
                 </div>
             </div>
-            {/*
-            <div className='items-center justify-center flex-col w-full'>
-                <div className='flex items-center justify-start flex-col w-full flex-1 rounded-[5px] gap-[20px] shadow-sm p-3 mb-5 bg-white rounded max-w-[1200px] bg-gray'>
-                    <div className="flex items-center justify-between w-full h2-title font-bold">
-                        <h3>Paciente 1</h3>
-                        <div className="flex gap-20 font-medium">
-                            <a href='/dieta' className="flex items-center">
-                                <BiSolidFoodMenu size={23} color="#00d46a" />
-                                <span>Editar dieta</span>
-                            </a>
-                            <a href='/medidas' className="flex items-center">
-                                <FaEdit size={23} color="#00d46a" />
-                                <span>Editar medidas</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    */}
             <ListaPacientes />
             <div className='flex pb-[200px]'>
                 <div class="tooltip">Ajuda

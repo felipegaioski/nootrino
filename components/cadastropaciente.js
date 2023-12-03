@@ -13,6 +13,7 @@ const Form = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [nome, setNome] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [codigo, setCodigo] = useState('');
 
   const isEmailValid = (email) => {
     // Basic email format validation
@@ -102,8 +103,22 @@ const Form = () => {
     setShowPassword(!showPassword);
   }
 
+  const handleCodigo = (event) => {
+    setCodigo(event.target.value);
+  }
+
   return (
     <div className="app-container">
+
+      <div className="form-group">
+        <label>Código de cadastro</label>
+        <input
+          type="text"
+          placeholder="Código de cadastro"
+          onChange={(event) => { handleCodigo(event) }}
+        />
+      </div>
+
       <div className="form-group">
         <label>Nome</label>
         <input

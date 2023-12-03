@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import { db } from '../firebase-config';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, doc } from 'firebase/firestore';
 import 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import Select from 'react-select'
@@ -16,6 +16,7 @@ const Form = () => {
   const [selectedCrn, setSelectedCrn] = useState(null);
   const [inscricao, setInscricao] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [codigo, setCodigo] = useState('');
 
   const isEmailValid = (email) => {
     // Basic email format validation
@@ -25,67 +26,94 @@ const Form = () => {
 
   const handleChange = async () => {
 
-    if (!nome || !email || !password || !confirmPassword) {
-      alert("Por favor, preencha todos os campos.");
-      return;
-    }
+    const codColletctionRef = collection(db, "codigos_nutri")
+    const cod_data = await getDocs(codColletctionRef);
+    const codigos = cod_data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    let codFound = false;
 
-    if (!isEmailValid(email)) {
-      alert("Por favor, insira um endereço de e-mail válido.");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      alert("As senhas não coincidem. Por favor, insira senhas iguais.");
-      return;
-    }
-
-    const usersColletctionRef = collection(db, "user")
-    const data = await getDocs(usersColletctionRef);
-    const users = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-
-    //gerar código
-    let cod;
-    let unique = false;
-    function generateCode() {
-      cod = Math.floor(Math.random() * 1000) + 1;
-    }
-
-    // verificar se já existe
-    function verifyCod() {
-      users.map(user => {
-        if (user.cod_user === cod) {
-          //generateCode();
-          console.log("Re-gerando código");
-          return false;
-        }
-      })
-      return true;
-    }
-
-    users.map(user => {
-      if (user.email === email) {
-        alert("O endereço de email já existe!");
+    codigos.map(cod => {
+      if (cod.id === codigo) {
+        codFound = true;
         return;
       }
     })
 
-    while (unique === false) {
-      // gerar código do usuário
-      generateCode();
-      unique = verifyCod();
-    };
+    if (codFound) {
 
-    addDoc(usersColletctionRef, {
-      nome: nome, email: email, senha: password, paciente: false, ativo: true,
-      crn: selectedCrn.value, inscricao: inscricao, cod_user: cod
-    });
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('nome', nome);
-      localStorage.setItem('cod_user', cod);
+      if (!nome || !email || !password || !confirmPassword || !codigo) {
+        alert("Por favor, preencha todos os campos.");
+        return;
+      }
+
+      if (password.length < 8) {
+        alert("Sua senha precisa ter no mínimo 8 caracteres");
+        return;
+      }
+
+      if (!isEmailValid(email)) {
+        alert("Por favor, insira um endereço de e-mail válido.");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert("As senhas não coincidem. Por favor, insira senhas iguais.");
+        return;
+      }
+
+      const usersColletctionRef = collection(db, "user")
+      const data = await getDocs(usersColletctionRef);
+      const users = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+      //gerar código
+      let cod;
+      let unique = false;
+      function generateCode() {
+        cod = Math.floor(Math.random() * 1000) + 1;
+      }
+
+      // verificar se já existe
+      function verifyCod() {
+        users.map(user => {
+          if (user.cod_user === cod) {
+            //generateCode();
+            console.log("Re-gerando código");
+            return false;
+          }
+        })
+        return true;
+      }
+
+      users.map(user => {
+        if (user.email === email) {
+          alert("O endereço de email já existe!");
+          return;
+        }
+      })
+
+      while (unique === false) {
+        // gerar código do usuário
+        generateCode();
+        unique = verifyCod();
+      };
+
+      addDoc(usersColletctionRef, {
+        nome: nome, email: email, senha: password, paciente: false, ativo: true,
+        crn: selectedCrn.value, inscricao: inscricao, cod_user: cod
+      });
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('nome', nome);
+        localStorage.setItem('cod_user', cod);
+      }
+      alert("Cadastro realizado com sucesso!");
+
+      const cod_doc = doc(db, "codigos_nutri", codigo);
+      const updatedCod = { used: true, cod_nutri: cod };
+      await updateDoc(cod_doc, updatedCod);
+
+      push('/home');
+    } else {
+      alert("Código de cadastro inválido");
     }
-    alert("Cadastro realizado com sucesso!");
-    push('/home');
   }
 
   const handleNome = (event) => {
@@ -116,8 +144,22 @@ const Form = () => {
     setShowPassword(!showPassword);
   }
 
+  const handleCodigo = (event) => {
+    setCodigo(event.target.value);
+  }
+
   return (
     <div className="app-container">
+
+      <div className="form-group">
+        <label>Código de cadastro</label>
+        <input
+          type="text"
+          placeholder="Código de cadastro"
+          onChange={(event) => { handleCodigo(event) }}
+        />
+      </div>
+
       <div className="form-group">
         <label>Nome</label>
         <input

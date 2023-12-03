@@ -46,7 +46,6 @@ const ListaPacientes = () => {
 
     return (
         <div className='flex form-group '>
-            {/* Food Selection */}
             <div className='form-group '>
                 <h2 className='h2-title font-bold'>Selecione o paciente</h2>
                 <Select
