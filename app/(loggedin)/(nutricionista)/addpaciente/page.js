@@ -1,6 +1,7 @@
 import { FaEdit } from 'react-icons/fa';
 import { BiSolidFoodMenu } from 'react-icons/bi';
 import ListaPacientes from '@/components/listaaddpacientes';
+import AddPacientes from '@/components/addpacientes';
 
 export default function AddPaciente() {
     return (
@@ -9,10 +10,11 @@ export default function AddPaciente() {
                 <h2 className='h2-title'>Adicionar Paciente</h2>
                 <br></br>
                 <div className='text-sm font-medium'>
-                    <p>Selecione o usuário para adicioná-lo aos seus pacientes</p>
+                    <p>Digite o endereço de email do novo paciente para gerar seu código de cadastro.</p>
                 </div>
             </div>
-            <ListaPacientes />
+            {/* <ListaPacientes /> */}
+            <AddPacientes />
             <div className='flex pb-[200px]'>
                 <div class="tooltip">Ajuda
                     <span class="tooltiptext">Aqui você pode adicionar um novo paciente! Basta pesquisar, selecioná-lo e clicar em "Adicionar".
