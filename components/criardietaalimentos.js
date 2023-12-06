@@ -368,10 +368,6 @@ const MealPlanBuilder = () => {
         <h1 className='text-xl font-bold text-green'>{nomePaciente}</h1>
       </div>
       <div className='form-group'>
-        <div className='flex items-center justify-center gap-[20px]'>
-          {!showNovoAlimento && <button onClick={handleButtonClick} className='max-w-[200px]'>Novo Alimento</button>}
-          {showNovoAlimento && <CriarAlimento onUpdate={updateFoodDataAndHideAlimento} />}
-        </div>
 
         {/* Day Selection */}
         <div className="form-group">
@@ -451,6 +447,11 @@ const MealPlanBuilder = () => {
       </div>
       <br></br>
       <DayButtons dieta={dieta} setDieta={setDieta} dieta_id={dieta_id} codpaciente={codPaciente} />
+      <br></br>
+      <div className='flex items-center justify-center gap-[20px] form-group'>
+        {!showNovoAlimento && <button onClick={handleButtonClick} className='max-w-[200px]'>Criar Novo Alimento</button>}
+        {showNovoAlimento && <CriarAlimento onUpdate={updateFoodDataAndHideAlimento} />}
+      </div>
       <br></br>
       <br></br>
     </div>
