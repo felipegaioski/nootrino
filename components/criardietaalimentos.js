@@ -25,29 +25,6 @@ const MealPlanBuilder = () => {
     }
   }, []);
 
-  // Buscar nome do paciente
-  // const findPaciente = async () => {
-  //   const usersCollectionRef = collection(db, "user");
-  //   try {
-  //     const data = await getDocs(usersCollectionRef);
-  //     const users = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-
-  //     const paciente = users.find((u) => u.cod_user === codPaciente);
-
-  //     if (paciente) {
-  //       setNomePaciente(paciente.nome);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching paciente data:', error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (codPaciente) {
-  //     findPaciente();
-  //   }
-  // }, [codPaciente]);
-
   // Aparecer a Criação de alimento quando clica o botão Novo Alimento
   const [showNovoAlimento, setShowNovoAlimento] = useState(false);
 

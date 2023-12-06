@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase-config';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
 const ShowAtendimentos = ({ onAtendimentoCreated }) => {
@@ -9,14 +10,62 @@ const ShowAtendimentos = ({ onAtendimentoCreated }) => {
         cod_nutri = localStorage.getItem('cod_user');
     }
     const [atendimentos, setAtendimentos] = useState([]);
+    const [orderBy, setOrderBy] = useState('paciente');
+    const [orderDirection, setOrderDirection] = useState('asc');
+    const [patientFilter, setPatientFilter] = useState('');
+    const [dateFilter, setDateFilter] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10);
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentAtendimentos = atendimentos.slice(indexOfFirstItem, indexOfLastItem);
+
+    const paginate = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
     const fetchAtendimentos = async () => {
         const atendColletctionRef = collection(db, "atendimentos");
         const data = await getDocs(atendColletctionRef);
         const atends = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-        const filteredAtends = atends.filter(atend => atend.cod_nutri === cod_nutri);
-        setAtendimentos(filteredAtends);
+        const filteredAtends = atends.filter(atend => atend.cod_nutri == cod_nutri);
+
+        const patientFiltered = filteredAtends.filter(atend => atend.paciente.toLowerCase().includes(patientFilter.toLowerCase()));
+
+        const dateFiltered = dateFilter
+            ? patientFiltered.filter(
+                (atend) =>
+                    atend.data.toMillis() >= dateFilter.getTime() &&
+                    atend.data.toMillis() < dateFilter.getTime() + 24 * 60 * 60 * 1000
+            )
+            : patientFiltered;
+
+        let orderedAtends;
+        switch (orderBy) {
+            case 'date':
+                orderedAtends = dateFiltered.sort((a, b) => {
+                    const result = a.data.toMillis() - b.data.toMillis();
+                    return orderDirection === 'asc' ? result : -result;
+                });
+                break;
+            case 'local':
+                orderedAtends = dateFiltered.sort((a, b) => {
+                    const result = a.local.localeCompare(b.local);
+                    return orderDirection === 'asc' ? result : -result;
+                });
+                break;
+            default:
+                orderedAtends = dateFiltered.sort((a, b) => {
+                    const result = a.paciente.localeCompare(b.paciente);
+                    return orderDirection === 'asc' ? result : -result;
+                });
+                break;
+        }
+
+        setAtendimentos(orderedAtends);
+
     };
 
     const handleDelete = async (atendimentoId) => {
@@ -37,42 +86,70 @@ const ShowAtendimentos = ({ onAtendimentoCreated }) => {
                 } catch (error) {
                     console.error("Error deleting atendimento: ", error);
                 }
-                // Swal.fire({
-                //     title: "Atendimento excluído!",
-                //     icon: "success",
-                //     confirmButtonColor: "#32bb67"
-                // });
             }
         });
     };
 
     useEffect(() => {
         fetchAtendimentos();
-    }, [onAtendimentoCreated]);
+    }, [onAtendimentoCreated, orderBy, orderDirection, patientFilter, dateFilter]);
 
     const formatDate = (timestamp) => {
         const date = timestamp.toDate();
-        const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: 'numeric', minute: 'numeric' })}`;
-        return formattedDate;
+        const formattedDate = date.toLocaleDateString();
+        const formattedTime = date.toLocaleTimeString([], { hour: 'numeric', minute: 'numeric' });
+        return { date: formattedDate, time: formattedTime };
+    };
+
+    const toggleOrderDirection = () => {
+        setOrderDirection(orderDirection === 'asc' ? 'desc' : 'asc');
     };
 
     return (
         <div className="container mx-auto p-4">
+            <div className="mb-4 filters">
+                <label htmlFor="patientFilter" className="mr-2">Filtrar por paciente:</label>
+                <input
+                    type="text"
+                    id="patientFilter"
+                    value={patientFilter}
+                    onChange={(e) => setPatientFilter(e.target.value)}
+                />
+
+                <label htmlFor="dateFilter" className="ml-4 mr-2">Filtrar por data:</label>
+                <input
+                    type="date"
+                    id="dateFilter"
+                    value={dateFilter ? dateFilter.toISOString().split('T')[0] : ''}
+                    onChange={(e) => setDateFilter(e.target.valueAsDate)}
+                />
+            </div>
             <div className="bg-white shadow-md rounded my-6">
                 <table className="min-w-full border">
                     <thead>
                         <tr>
-                            <th className="border-b">Paciente</th>
-                            <th className="border-b">Data</th>
-                            <th className="border-b">Local</th>
+                            <th className="border-b">
+                                <button onClick={() => setOrderBy('paciente')}>Paciente</button>
+                                {orderBy === 'paciente' && <button onClick={toggleOrderDirection}>{orderDirection === 'asc' ? '↑' : '↓'}</button>}
+                            </th>
+                            <th className="border-b">
+                                <button onClick={() => setOrderBy('date')}>Data</button>
+                                {orderBy === 'date' && <button onClick={toggleOrderDirection}>{orderDirection === 'asc' ? '↑' : '↓'}</button>}
+                            </th>
+                            <th className="border-b">Hora</th>
+                            <th className="border-b">
+                                <button onClick={() => setOrderBy('local')}>Local</button>
+                                {orderBy === 'local' && <button onClick={toggleOrderDirection}>{orderDirection === 'asc' ? '↑' : '↓'}</button>}
+                            </th>
                             <th className="border-b"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {atendimentos.map((atendimento, index) => (
+                        {currentAtendimentos.map((atendimento, index) => (
                             <tr key={index} className="hover:bg-gray-100">
                                 <td className="py-2 px-4 border-b">{atendimento.paciente}</td>
-                                <td className="py-2 px-4 border-b">{formatDate(atendimento.data)}</td>
+                                <td className="py-2 px-4 border-b">{formatDate(atendimento.data).date}</td>
+                                <td className="py-2 px-4 border-b">{formatDate(atendimento.data).time}</td>
                                 <td className="py-2 px-4 border-b">{atendimento.local}</td>
                                 <td className="py-2 px-4 border-b">
                                     <button
@@ -86,6 +163,31 @@ const ShowAtendimentos = ({ onAtendimentoCreated }) => {
                         ))}
                     </tbody>
                 </table>
+                <div className="pagination">
+                    <button
+                        onClick={() => paginate(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="mr-2"
+                    >
+                        <FaArrowLeft />
+                    </button>
+                    {Array.from({ length: Math.ceil(atendimentos.length / itemsPerPage) }).map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => paginate(index + 1)}
+                            className={currentPage === index + 1 ? 'active' : ''}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                    <button
+                        onClick={() => paginate(currentPage + 1)}
+                        disabled={currentPage === Math.ceil(atendimentos.length / itemsPerPage)}
+                        className="ml-2"
+                    >
+                        <FaArrowRight />
+                    </button>
+                </div>
             </div>
         </div>
 

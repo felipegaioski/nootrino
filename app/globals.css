@@ -271,3 +271,37 @@ input::-webkit-inner-spin-button {
   visibility: visible;
 }
 
+.pagination button{
+  padding: 4px;
+  background: #00d451;
+  margin: 4px;
+  border-radius: 5px;
+  color: #fff;
+  transition: all 300ms ease;
+}
+
+.pagination button:hover {
+  cursor: pointer;
+  background-color: #39d487;
+}
+
+.border-b {
+  font-size: large;
+}
+
+.filters label {
+  color: #3cb651;
+  font-weight: 700;
+}
+
+.filters input {
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  outline: 1px solid #999;
+  background-color: #f7f7f7;
+  color: #999;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  outline: 1px solid 444;
+}
+

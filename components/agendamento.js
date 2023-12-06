@@ -21,7 +21,7 @@ const Agendamento = () => {
   // Buscar e selecionar paciente
   const [selectedPaciente, setSelectedPaciente] = useState([]);
   const [pacientes, setPacientes] = useState([]);
-  const [usersColletctionRef, setUsersColletctionRef] = useState(null);
+  const [usersCollectionRef, setUsersCollectionRef] = useState(null);
 
   let cod_nutri;
   if (typeof window !== 'undefined') {
@@ -29,12 +29,12 @@ const Agendamento = () => {
   }
 
   const fetchPacientes = async () => {
-    const usersColletctionRef = collection(db, "user");
-    setUsersColletctionRef(usersColletctionRef);
-    const data = await getDocs(usersColletctionRef);
+    const usersCollectionRef = collection(db, "user");
+    setUsersCollectionRef(usersCollectionRef);
+    const data = await getDocs(usersCollectionRef);
     const users = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-    const filteredUsers = users.filter(user => user.paciente === true && user.cod_nutri === cod_nutri);
+    const filteredUsers = users.filter(user => user.paciente === true && user.cod_nutri == cod_nutri);
 
     setPacientes(filteredUsers);
   };
@@ -78,8 +78,8 @@ const Agendamento = () => {
     // Convert to Firestore Timestamp
     const timestamp = Timestamp.fromDate(selectedDateTime);
 
-    const atendColletctionRef = collection(db, "atendimentos");
-    await addDoc(atendColletctionRef, {
+    const atendCollectionRef = collection(db, "atendimentos");
+    await addDoc(atendCollectionRef, {
       paciente: selectedPaciente.value.nome, cod_nutri: cod_nutri, cod_paciente: selectedPaciente.value.cod_user,
       data: timestamp, local: local
     });
