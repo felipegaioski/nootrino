@@ -1,13 +1,36 @@
 'use client'
 import AtualizarMedida from '@/components/medidasform'
 import Medidasform from '@/components/medidasform'
+import Swal from 'sweetalert2';
+import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 
 export default function Medidas() {
+  const help = () => {
+    Swal.fire({
+      title: "Medidas do Paciente",
+      confirmButtonColor: "#32bb67",
+      //text: "That thing is still around?",
+      icon: "question",
+      html: `<p>Nesta página você pode visualizar os registros de medidas corporais do paciente.
+      <br> <b>Novo Registro de Medidas: </b> clique nesse botão para preencher o formulário e adicionar um novo conjunto de medidas.
+      <br> <b>Peso: </b>digite o peso do paciente em quilogramas (kg).
+      <br> <b>Altura: </b>digite a altura do paciente em centímetros (sem ponto ou vírgula).
+      <br> <b>IMC: </b>o imc será calculado automaticamente ao preencher o peso e a altura.
+      <br> <b>Percentual de gordura: </b>digite o percentual de gordura do paciente.
+      <br> <b>Circunferências: </b>digite as circunferências dos braços, das pernas e do abdômen do paciente.
+      <br> <b>Selecione a data: </b>selecione a data do registro das medidas. Lembre-se que não é possível escolher uma data futura.
+      <br> <b>Observações: </b>digite quaisquer observações sobre a avaliação do paciente.
+      <br> <b>Salvar Medidas: </b>clique em "Salvar medidas" para finalizar e salvar o novo conjunto de medidas.
+      <br> <b>Excluir: </b>clique no botão "Excluir" para excluir a medida da lista.
+      <br> <b>Guia para o IMC: </b>por último, há uma tabela de guia rápido para o IMC.</p>`
+    });
+  }
+
   return (
     <main className='ml-[80px] pt-[60px] flex gap-[20px] px-[20px]'>
       <div className='flex items-center justify-start flex-col w-full flex-1'>
         <div className='items-center justify-start flex-col w-full flex-1 text-[20px] py-[20px] gap-[10px] font-bold'>
-          <h2 className='h2-title'>Medidas do paciente</h2>
+          <h2 className='h2-title'>Medidas do paciente <button onClick={help}><HiMiniQuestionMarkCircle color="green" size={30} /></button></h2>
         </div>
         <AtualizarMedida />
         <div className='form-group items-center'>
@@ -52,15 +75,7 @@ export default function Medidas() {
           </table>
 
         </div>
-        <div className='flex pb-[200px]'>
-          <div class="tooltip">Ajuda
-            <span class="tooltiptext">Aqui você pode ver e adicionar novas medidas corporais do paciente. Para criar um novo conjunto de medidas, basta clicar em
-              "Novo Registro de Medidas", preencher com as informações e salvar em "Salvar Medidas". IMPORTANTE: O sistema não permitirá que você digite valores inválidos.
-              O peso deve estar em quilogramas, a altura deve estar em centímetros (sem . ou ,),
-              O percentual de Gordura deve estar em porcentageme e as circunferências devem estar em centímetros. Para excluir, basta clicar no botão "Excluir" ABAIXO da medida.
-            </span>
-          </div>
-        </div>
+
       </div>
     </main>
   )

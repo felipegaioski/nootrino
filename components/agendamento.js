@@ -57,11 +57,7 @@ const Agendamento = () => {
   };
 
   const handleDateChange = (date) => {
-    if (validateDate(date)) {
-      setStartDate(date);
-    } else {
-      alert("Por favor, selecione uma data futura");
-    }
+    setStartDate(date);
   };
 
   const handleTimeChange = (time) => {
@@ -75,10 +71,16 @@ const Agendamento = () => {
     selectedDateTime.setHours(parseInt(hours, 10));
     selectedDateTime.setMinutes(parseInt(minutes, 10));
 
+    if (!validateDate(startDate)) {
+      alert("Por favor, selecione uma data futura");
+      return;
+    }
+
     // Convert to Firestore Timestamp
     const timestamp = Timestamp.fromDate(selectedDateTime);
 
     const atendCollectionRef = collection(db, "atendimentos");
+
     await addDoc(atendCollectionRef, {
       paciente: selectedPaciente.value.nome, cod_nutri: cod_nutri, cod_paciente: selectedPaciente.value.cod_user,
       data: timestamp, local: local

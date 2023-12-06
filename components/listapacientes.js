@@ -50,9 +50,6 @@ const Lista = () => {
 
     return (
         <div>
-            <div className='items-center justify-start flex-col w-full flex-1 text-[20px] py-[20px] gap-[10px] font-bold'>
-                <h2 className='h2-title'>Seus Pacientes</h2>
-            </div>
             <div className='form-group'>
                 <label>Pesquisar paciente</label>
                 <input

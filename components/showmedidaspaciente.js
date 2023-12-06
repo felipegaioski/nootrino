@@ -34,7 +34,7 @@ const ShowMedidasPaciente = () => {
         <div className="container mx-auto p-4">
             <div className="bg-white shadow-md rounded my-6">
                 <table className="min-w-full border">
-                    <thead>
+                    <thead className='font-light'>
                         <tr>
                             <th className="border-b">Altura (cm)</th>
                             <th className="border-b">Peso (kg)</th>
