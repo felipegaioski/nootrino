@@ -8,6 +8,7 @@ import DayButtons from './show';
 
 const MealPlanBuilder = () => {
   const [nomePaciente, setNomePaciente] = useState('');
+
   let cod_nutri;
   if (typeof window !== 'undefined') {
     cod_nutri = localStorage.getItem('cod_user');
@@ -40,7 +41,7 @@ const MealPlanBuilder = () => {
   //States para Selects
   const [selectedDay, setSelectedDay] = useState(null);
   const [foods, setFoods] = useState([]);
-  const [selectedFood, setSelectedFood] = useState([]);
+  const [selectedFood, setSelectedFood] = useState(null);
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [selectedQuant, setSelectedQuant] = useState(null);
   const [porcao, setNewPorcao] = useState(null);
@@ -418,6 +419,16 @@ const MealPlanBuilder = () => {
             isSearchable
           />
         </div>
+
+        {selectedFood && (
+          <div className='form-group'>
+            <h2 className='h2-title font-bold'>Informações do Alimento Selecionado</h2>
+            <p><strong>Nome:</strong> {selectedFood.value.nome}</p>
+            <p><strong>Quantidade:</strong> {selectedFood.value.quantidade} gramas ou ml</p>
+            <p><strong>Medida caseira:</strong> {selectedFood.value.porcao} {selectedFood.value.unidade}</p>
+            <p><strong>Calorias:</strong> {selectedFood.value.calorias} kcal</p>
+          </div>
+        )}
 
         {/* Quantidade */}
         <div className='form-group'>

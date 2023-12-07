@@ -16,7 +16,7 @@ export default function Home() {
       <br><br> <b>COMO CRIAR A DIETA:</b> 
       <br> <b>Selecione o dia da semana: </b>selecione na lista o dia da semana ao qual pretende adicionar um alimento. 
       <br> <b>Selecione a refeição: </b>selecione na lista a refeição à qual pretende adicionar um alimento.
-      <br> <b>Selecione o alimento: </b>selecione o alimento que pretende adicionar à dieta.
+      <br> <b>Selecione o alimento: </b>selecione o alimento que pretende adicionar à dieta. Quando selecionar um alimento, suas informações aparecerão abaixo!
       <br> <b>Quantidade: </b>digite a quantidade em gramas ou mililitros desejada do alimento. O sistema calculará
       automaticamente a porção e as calorias de acordo com a quantidade.
       <br> <b>Adicionar: </b>para adicionar o alimento à dieta do paciente, clique em "Adicionar". Você verá novo item ao clicar
