@@ -23,6 +23,13 @@ const Agendamento = () => {
   const [pacientes, setPacientes] = useState([]);
   const [usersCollectionRef, setUsersCollectionRef] = useState(null);
 
+  const timeOptions = [
+    '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
+    '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
+    '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30',
+    '19:00', '19:30', '20:00'
+  ];
+
   let cod_nutri;
   if (typeof window !== 'undefined') {
     cod_nutri = localStorage.getItem('cod_user');
@@ -71,7 +78,7 @@ const Agendamento = () => {
     selectedDateTime.setHours(parseInt(hours, 10));
     selectedDateTime.setMinutes(parseInt(minutes, 10));
 
-    if (!validateDate(startDate)) {
+    if (!validateDate(selectedDateTime)) {
       alert("Por favor, selecione uma data futura");
       return;
     }
@@ -115,9 +122,13 @@ const Agendamento = () => {
             <DatePicker selected={startDate} dateFormat="dd/MM/yy" onChange={handleDateChange} />
           </div>
 
-          <div class="form-group">
+          <div className="form-group">
             <label for="timepicker">Selecione a Hora</label>
-            <input type="time" id="timepicker" value={startTime} onChange={(e) => handleTimeChange(e.target.value)}></input>
+            <select id="timepicker" value={startTime} onChange={(e) => handleTimeChange(e.target.value)}>
+              {timeOptions.map((time, index) => (
+                <option key={index} value={time}>{time}</option>
+              ))}
+            </select>
           </div>
 
           <div className="form-group">
