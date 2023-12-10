@@ -5,7 +5,7 @@ import TimePicker from 'react-time-picker';
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-time-picker/dist/TimePicker.css';
 import { db } from '../firebase-config';
-import { collection, getDocs, addDoc, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, addDoc, Timestamp, where } from 'firebase/firestore';
 import Select from 'react-select'
 import ShowAtendimentos from '@/components/showatendimentos';
 
@@ -17,6 +17,7 @@ const Agendamento = () => {
   //const [timestamp, setTimestamp] = useState(null);
   const [local, setLocal] = useState('')
   const [atendimentoCreated, setAtendimentoCreated] = useState(false);
+  const [existingAppointments, setExistingAppointments] = useState([]);
 
   // Buscar e selecionar paciente
   const [selectedPaciente, setSelectedPaciente] = useState([]);
@@ -34,6 +35,56 @@ const Agendamento = () => {
   if (typeof window !== 'undefined') {
     cod_nutri = localStorage.getItem('cod_user');
   }
+
+  const fetchExistingAppointments = async (selectedDate) => {
+    try {
+      const startOfDay = new Date(selectedDate);
+      startOfDay.setHours(0, 0, 0, 0);
+
+      const endOfDay = new Date(selectedDate);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      const atendCollectionRef = collection(db, "atendimentos");
+      const data = await getDocs(atendCollectionRef);
+
+      const appointments = data.docs
+        .filter((doc) => {
+          const appointmentDate = doc.data().data.toDate();
+          return appointmentDate >= startOfDay && appointmentDate <= endOfDay;
+        })
+        .map((doc) => doc.data().data.toDate());
+
+      setExistingAppointments(appointments);
+      console.log(appointments)
+    } catch (error) {
+      console.error("Error fetching existing appointments:", error);
+      setExistingAppointments([]); // Handle the case when there is an error
+    }
+  };
+
+  useEffect(() => {
+    if (startDate) {
+      fetchExistingAppointments(startDate);
+    }
+  }, [startDate]);
+
+  const availableTimeOptions = timeOptions.filter((time) => {
+    const [hours, minutes] = time.split(':');
+    const currentTime = new Date(startDate);
+    currentTime.setHours(parseInt(hours, 10));
+    currentTime.setMinutes(parseInt(minutes, 10));
+
+    return !existingAppointments.some((appointment) => {
+      const appointmentStart = new Date(appointment);
+      const appointmentEnd = new Date(appointmentStart);
+      appointmentEnd.setMinutes(appointmentEnd.getMinutes() + 30); // Assuming each appointment is 30 minutes
+
+      return (
+        (currentTime >= appointmentStart && currentTime < appointmentEnd) ||
+        (appointmentStart >= currentTime && appointmentStart < currentTime)
+      );
+    });
+  });
 
   const fetchPacientes = async () => {
     const usersCollectionRef = collection(db, "user");
@@ -72,7 +123,11 @@ const Agendamento = () => {
   };
 
   const handleAgendamento = async () => {
-    // Combine selected date and time into a single timestamp
+    if (!selectedPaciente || !selectedPaciente.value) {
+      alert("Por favor, selecione um paciente.");
+      return;
+    }
+
     const selectedDateTime = new Date(startDate);
     const [hours, minutes] = startTime.split(':');
     selectedDateTime.setHours(parseInt(hours, 10));
@@ -96,6 +151,8 @@ const Agendamento = () => {
 
     setAtendimentoCreated(true);
     setShowAgendamento(false);
+    setSelectedPaciente([]);
+    fetchExistingAppointments(startDate);
   };
 
   return (
@@ -125,7 +182,7 @@ const Agendamento = () => {
           <div className="form-group">
             <label for="timepicker">Selecione a Hora</label>
             <select id="timepicker" value={startTime} onChange={(e) => handleTimeChange(e.target.value)}>
-              {timeOptions.map((time, index) => (
+              {availableTimeOptions.map((time, index) => (
                 <option key={index} value={time}>{time}</option>
               ))}
             </select>
