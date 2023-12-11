@@ -11,10 +11,9 @@ import ShowAtendimentos from '@/components/showatendimentos';
 
 const Agendamento = () => {
   // Mostrar ou esconder formulário
-  const [showAgendamento, setShowAgendamento] = useState(false);  // Initialize state
+  const [showAgendamento, setShowAgendamento] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
-  const [startTime, setStartTime] = useState('12:00'); // Initial time value
-  //const [timestamp, setTimestamp] = useState(null);
+  const [startTime, setStartTime] = useState('12:00');
   const [local, setLocal] = useState('')
   const [atendimentoCreated, setAtendimentoCreated] = useState(false);
   const [existingAppointments, setExistingAppointments] = useState([]);
@@ -58,7 +57,7 @@ const Agendamento = () => {
       console.log(appointments)
     } catch (error) {
       console.error("Error fetching existing appointments:", error);
-      setExistingAppointments([]); // Handle the case when there is an error
+      setExistingAppointments([]);
     }
   };
 
@@ -77,7 +76,7 @@ const Agendamento = () => {
     return !existingAppointments.some((appointment) => {
       const appointmentStart = new Date(appointment);
       const appointmentEnd = new Date(appointmentStart);
-      appointmentEnd.setMinutes(appointmentEnd.getMinutes() + 30); // Assuming each appointment is 30 minutes
+      appointmentEnd.setMinutes(appointmentEnd.getMinutes() + 30);
 
       return (
         (currentTime >= appointmentStart && currentTime < appointmentEnd) ||
@@ -138,7 +137,6 @@ const Agendamento = () => {
       return;
     }
 
-    // Convert to Firestore Timestamp
     const timestamp = Timestamp.fromDate(selectedDateTime);
 
     const atendCollectionRef = collection(db, "atendimentos");
@@ -147,7 +145,6 @@ const Agendamento = () => {
       paciente: selectedPaciente.value.nome, cod_nutri: cod_nutri, cod_paciente: selectedPaciente.value.cod_user,
       data: timestamp, local: local
     });
-    //alert("Atendimento criado com sucesso!");
 
     setAtendimentoCreated(true);
     setShowAgendamento(false);

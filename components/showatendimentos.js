@@ -16,6 +16,9 @@ const ShowAtendimentos = ({ onAtendimentoCreated }) => {
     const [dateFilter, setDateFilter] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
+    const [showAll, setShowAll] = useState(true);
+    const [showPast, setShowPast] = useState(false);
+    const [showFuture, setShowFuture] = useState(false);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -30,7 +33,17 @@ const ShowAtendimentos = ({ onAtendimentoCreated }) => {
         const data = await getDocs(atendColletctionRef);
         const atends = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-        const filteredAtends = atends.filter(atend => atend.cod_nutri == cod_nutri);
+        let filteredAtends = atends.filter(atend => atend.cod_nutri == cod_nutri);
+
+        const now = new Date();
+
+        if (showAll) {
+            filteredAtends = filteredAtends;
+        } else if (showPast) {
+            filteredAtends = filteredAtends.filter(atend => atend.data.toMillis() < now.getTime());
+        } else if (showFuture) {
+            filteredAtends = filteredAtends.filter(atend => atend.data.toMillis() >= now.getTime());
+        }
 
         const patientFiltered = filteredAtends.filter(atend => atend.paciente.toLowerCase().includes(patientFilter.toLowerCase()));
 
@@ -92,7 +105,7 @@ const ShowAtendimentos = ({ onAtendimentoCreated }) => {
 
     useEffect(() => {
         fetchAtendimentos();
-    }, [onAtendimentoCreated, orderBy, orderDirection, patientFilter, dateFilter]);
+    }, [onAtendimentoCreated, orderBy, orderDirection, patientFilter, dateFilter, showAll, showPast, showFuture]);
 
     const formatDate = (timestamp) => {
         const date = timestamp.toDate();
@@ -123,6 +136,42 @@ const ShowAtendimentos = ({ onAtendimentoCreated }) => {
                     value={dateFilter ? dateFilter.toISOString().split('T')[0] : ''}
                     onChange={(e) => setDateFilter(e.target.valueAsDate)}
                 />
+
+                <label className="ml-4">
+                    <input
+                        type="checkbox"
+                        checked={showAll}
+                        onChange={() => {
+                            setShowAll(true);
+                            setShowPast(false);
+                            setShowFuture(false);
+                        }}
+                    /> Todos
+                </label>
+
+                <label className="ml-4">
+                    <input
+                        type="checkbox"
+                        checked={showPast}
+                        onChange={() => {
+                            setShowAll(false);
+                            setShowPast(!showPast);
+                            setShowFuture(false);
+                        }}
+                    /> Concluídos
+                </label>
+
+                <label className="ml-4">
+                    <input
+                        type="checkbox"
+                        checked={showFuture}
+                        onChange={() => {
+                            setShowAll(false);
+                            setShowPast(false);
+                            setShowFuture(!showFuture);
+                        }}
+                    /> Futuros
+                </label>
             </div>
             <div className="bg-white shadow-md rounded my-6">
                 <table className="min-w-full border">
