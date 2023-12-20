@@ -20,9 +20,11 @@ export default function Home() {
       confirmButtonColor: "#32bb67",
       //text: "That thing is still around?",
       icon: "question",
-      html: `<p>Bem vindo(a), nutricionista! Esta é a sua página inicial! Acesse facilmente todas as funcionalidades da Nootrino!
+      html: `<div class='align-left'>
+      <p>Bem vindo(a), nutricionista! Esta é a sua página inicial! Acesse facilmente todas as funcionalidades da Nootrino!
       <br> Ao lado esquerdo você encontrará ícones que também levarão você às páginas.
-      <br> Para fazer log out, basta clicar em sair!</p>`
+      <br> Para fazer log out, basta clicar em sair!</p>
+      </div>`
     });
   }
 

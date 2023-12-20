@@ -11,12 +11,14 @@ export default function NovoAlimento() {
             confirmButtonColor: "#32bb67",
             //text: "That thing is still around?",
             icon: "question",
-            html: `<p>Aqui você pode criar novos alimentos para adicioná-los às dietas dos seus pacientes. Basta preencher os campos e clicar em "Criar Alimento".
+            html: `<div class='align-left'>
+            <p>Aqui você pode criar novos alimentos para adicioná-los às dietas dos seus pacientes. Basta preencher os campos e clicar em "Criar Alimento".
             <br> <b>Nome da comida:</b> Digite nesse campo o nome que desejar para o novo alimento. Lembre-se que não é possível adicionar um alimento cujo nome já exista!
             <br> <b>Quantidade:</b> Digite nesse campo a quantidade em gramas ou mililitros da porção do alimento. O valor deve ser maior que zero!
             <br> <b>Porção:</b> Digite nesse campo a medida caseira (valor numérico) correspondente à quantidade. O valor deve ser maior que zero!
             <br> <b>Unidade:</b> Selecione nesse campo o tipo da medida caseira.
-            <br> <b>Calorias:</b> Digite nesse campo a quantidade de calorias dessa porção do alimento. O valor deve ser maior que zero!</p>`
+            <br> <b>Calorias:</b> Digite nesse campo a quantidade de calorias dessa porção do alimento. O valor deve ser maior que zero!</p>
+            </div>`
         });
     }
 

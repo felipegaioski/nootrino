@@ -13,7 +13,9 @@ export default function PlanoAlimentar() {
             confirmButtonColor: "#32bb67",
             //text: "That thing is still around?",
             icon: "question",
-            html: `<p>Aqui você pode ver a sua dieta da semana. Basta clicar no dia da semana para ver a lista de alimentos!</p>`
+            html: `<div class='align-left'>
+            <p>Aqui você pode ver a sua dieta da semana. Basta clicar no dia da semana para ver a lista de alimentos!</p>
+            </div>`
         });
     }
 

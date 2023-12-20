@@ -11,7 +11,9 @@ export default function Consultas() {
       confirmButtonColor: "#32bb67",
       //text: "That thing is still around?",
       icon: "question",
-      html: `<p>Aqui você pode ver a lista das consultas que você já teve com seu/sua nutricionista!</p>`
+      html: `<div class='align-left'>
+      <p>Aqui você pode ver a lista das consultas que você já teve com seu/sua nutricionista!</p>
+      </div>`
     });
   }
 

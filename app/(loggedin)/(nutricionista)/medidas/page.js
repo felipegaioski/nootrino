@@ -11,7 +11,8 @@ export default function Medidas() {
       confirmButtonColor: "#32bb67",
       //text: "That thing is still around?",
       icon: "question",
-      html: `<p>Nesta página você pode visualizar os registros de medidas corporais do paciente.
+      html: `<div class='align-left'>
+      <p>Nesta página você pode visualizar os registros de medidas corporais do paciente.
       <br> <b>Novo Registro de Medidas: </b> clique nesse botão para preencher o formulário e adicionar um novo conjunto de medidas.
       <br> <b>Peso: </b>digite o peso do paciente em quilogramas (kg).
       <br> <b>Altura: </b>digite a altura do paciente em centímetros (sem ponto ou vírgula).
@@ -22,7 +23,8 @@ export default function Medidas() {
       <br> <b>Observações: </b>digite quaisquer observações sobre a avaliação do paciente.
       <br> <b>Salvar Medidas: </b>clique em "Salvar medidas" para finalizar e salvar o novo conjunto de medidas.
       <br> <b>Excluir: </b>clique no botão "Excluir" para excluir a medida da lista.
-      <br> <b>Guia para o IMC: </b>por último, há uma tabela de guia rápido para o IMC.</p>`
+      <br> <b>Guia para o IMC: </b>por último, há uma tabela de guia rápido para o IMC.</p>
+      </div>`
     });
   }
 

@@ -30,9 +30,11 @@ export default function HomePaciente() {
       confirmButtonColor: "#32bb67",
       //text: "That thing is still around?",
       icon: "question",
-      html: `<p>Bem vindo(a)! Esta é sua página inicial. Aqui você pode acessar as funcionalidades da Nootrino.
+      html: `<div class='align-left'>
+      <p>Bem vindo(a)! Esta é sua página inicial. Aqui você pode acessar as funcionalidades da Nootrino.
       <br> Ao lado esquerdo você encontrará ícones que também levarão você às páginas.
-      <br> Para fazer log out, basta clicar em sair!</p>`
+      <br> Para fazer log out, basta clicar em sair!</p>
+      </div>`
     });
   }
 

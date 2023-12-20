@@ -10,8 +10,10 @@ export default function MedidasPaciente() {
       confirmButtonColor: "#32bb67",
       //text: "That thing is still around?",
       icon: "question",
-      html: `<p>Aqui você pode ver o registro das suas medidas corporais ao longo do acompanhamento!
-      <br> Ao lado há uma tabela guia para o IMC!</p>`
+      html: `<div class='align-left'>
+      <p>Aqui você pode ver o registro das suas medidas corporais ao longo do acompanhamento!
+      <br> Ao lado há uma tabela guia para o IMC!</p>
+      </div>`
     });
   }
 

@@ -11,7 +11,8 @@ export default function Agenda() {
       confirmButtonColor: "#32bb67",
       //text: "That thing is still around?",
       icon: "question",
-      html: `<p>Aqui é onde você pode ver, criar e excluir seus agendamentos.
+      html: `<div class='align-left'>
+      <p>Aqui é onde você pode ver, criar e excluir seus agendamentos.
       <br> <b>Filtros: </b>para filtrar os agendamentos, basta digitar o nome do paciente e/ou selecionar uma data. Marque ao lado se deseja ver todos os agendamentos, apenas 
       os concluídos ou apenas os futuros.
       <br> <b>Ordenar: </b>é possível ordenar os agendamentos por paciente, por data e por local. Basta clicar no nome da coluna correspondente.
@@ -22,7 +23,8 @@ export default function Agenda() {
       <br> <b>Selecione a data: </b>escolha a data do agendamento. Lembre que só é possível registrar agendamentos para datas futuras!
       <br> <b>Selecione a hora: </b>escolha o horário do agendamento. Lembre-se que só aparecerão na lista os horários disponíveis para a data selecionada!
       <br> <b>Local: </b>Digite o local escolhido para a consulta.
-      <br> <b>Agendar consulta: </b>clique em "Agendar consulta" para salvar o novo agendamento.</p>`
+      <br> <b>Agendar consulta: </b>clique em "Agendar consulta" para salvar o novo agendamento.</p>
+      </div>`
     });
   }
 

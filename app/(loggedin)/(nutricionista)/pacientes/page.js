@@ -12,9 +12,11 @@ export default function ListaPacientes() {
       confirmButtonColor: "#32bb67",
       //text: "That thing is still around?",
       icon: "question",
-      html: `<p>Nesta página você pode encontrar todos os seus pacientes. Para pesquisar, basta digitar o nome no campo "pesquisar paciente".
+      html: `<div class='align-left'>
+      <p>Nesta página você pode encontrar todos os seus pacientes. Para pesquisar, basta digitar o nome no campo "pesquisar paciente".
       <br> Clique em "Editar dieta" para criar ou editar a dieta de um paciente.
-      <br> Clique em "Editar medidas" para ver e adicionar novas medidas corporais do paciente.</p>`
+      <br> Clique em "Editar medidas" para ver e adicionar novas medidas corporais do paciente.</p>
+      </div>`
     });
   }
 

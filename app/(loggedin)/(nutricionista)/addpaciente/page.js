@@ -13,9 +13,11 @@ export default function AddPaciente() {
             confirmButtonColor: "#32bb67",
             //text: "That thing is still around?",
             icon: "question",
-            html: `<p>Nesta página você pode gerar códigos de cadastro para novos pacientes. Você vai precisar do email do paciente
+            html: `<div class='align-left'>
+            <p>Nesta página você pode gerar códigos de cadastro para novos pacientes. Você vai precisar do email do paciente
             para gerar o código. <br> Assim que digitar o email, clique em "Gerar código de cadastro", e o código aparecerá logo abaixo.
-            Clique em "Copiar código" para copiar e enviá-lo ao paciente.<br> <b>OBS:</b> Só é possível gerar um código por email.</p>`
+            Clique em "Copiar código" para copiar e enviá-lo ao paciente.<br> <b>OBS:</b> Só é possível gerar um código por email.</p>
+            </div>`
         });
     }
 

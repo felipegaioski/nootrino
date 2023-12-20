@@ -11,7 +11,8 @@ export default function Home() {
       confirmButtonColor: "#32bb67",
       //text: "That thing is still around?",
       icon: "question",
-      html: `<p>Essa é a página de criação de dietas. 
+      html: `<div class='align-left'>
+      <p>Essa é a página de criação de dietas. 
       <br> Se o seu paciente já tiver uma dieta em vigor, você a verá abaixo. Basta clicar nos dias da semana. Caso seja um novo paciente, a dieta estará vazia.
       <br><br> <b>COMO CRIAR A DIETA:</b> 
       <br> <b>Selecione o dia da semana: </b>selecione na lista o dia da semana ao qual pretende adicionar um alimento. 
@@ -28,7 +29,8 @@ export default function Home() {
       <br><br> <b>IMPORTANTE:</b> A DIETA SÓ SERÁ SALVA QUANDO CLICAR EM "Salvar Dieta". SE VOCÊ SAIR DESTA PÁGINA ANTES DE CLICAR, 
       SUAS ALTERAÇÕES NÃO SERÃO SALVAS.
       <br> <br> Clique em "Criar Novo alimento" para criar rapidamente um novo alimento, caso seja necessário.
-      <a href="addalimento" className='text-[yellow]'> <b>Clique aqui</b> </a> para saber como.</p>`
+      <a href="addalimento" className='text-[yellow]'> <b>Clique aqui</b> </a> para saber como.</p>
+      </div>`
     });
   }
 
